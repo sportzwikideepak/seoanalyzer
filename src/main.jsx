@@ -18,6 +18,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App.jsx';
 import SavedReports from './SavedReports.jsx'; // <-- Import new component
 import './App.css';
+import GSCQueries from './GSCQueries.jsx';
+import GSCInsight from './GSCInsight.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -25,6 +27,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/saved-reports" element={<SavedReports />} />
+        <Route path="/gsc" element={<GSCQueries />} />
+        <Route path="/gsc/insight" element={<GSCInsight />} />
+
+
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

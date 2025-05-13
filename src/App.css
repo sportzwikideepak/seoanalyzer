@@ -211,3 +211,23 @@ h1, h2 {
   border: 1px solid #ccc;
   padding: 8px;
 } */
+
+
+
+.seo-table-markdown {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.seo-table-markdown th,
+.seo-table-markdown td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.seo-table-markdown th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
