@@ -20,6 +20,7 @@ import SavedReports from './SavedReports.jsx'; // <-- Import new component
 import './App.css';
 import GSCQueries from './GSCQueries.jsx';
 import GSCInsight from './GSCInsight.jsx';
+import DeepSeekReports from './DeepSeekReports.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -29,6 +30,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/saved-reports" element={<SavedReports />} />
         <Route path="/gsc" element={<GSCQueries />} />
         <Route path="/gsc/insight" element={<GSCInsight />} />
+        <Route path="/saved" element={<DeepSeekReports />} />
+
 
 
       </Routes>

@@ -1,0 +1,283 @@
+/* .report-container {
+  max-width: 960px;
+  margin: auto;
+  padding: 2rem;
+  font-family: "Segoe UI", sans-serif;
+  color: #333;
+}
+
+.report-title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #0d386e;
+  border-left: 5px solid #0d386e;
+  padding-left: 10px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.report-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.report-card {
+  background-color: #f1f5f9;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #0d386e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.report-meta {
+  flex: 1;
+}
+
+.report-id {
+  font-weight: bold;
+  color: #0d386e;
+  margin-right: 10px;
+}
+
+.report-url {
+  color: #1d4ed8;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.view-btn {
+  padding: 6px 12px;
+  background-color: #0d386e;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.view-btn:hover {
+  background-color: #0b2e57;
+}
+
+.report-output {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #fffbe6;
+  border-left: 5px solid #facc15;
+  border-radius: 6px;
+}
+
+.report-subtitle {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  color: #92400e;
+}
+
+.report-url-title {
+  font-size: 0.95rem;
+  color: #7c3aed;
+  margin-bottom: 1rem;
+}
+
+.report-content {
+  white-space: pre-wrap;
+  background-color: #fafafa;
+  padding: 1rem;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 0.9rem;
+} */
+
+
+
+
+.report-container {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.report-title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.report-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.report-card {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.report-meta {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+}
+
+.report-id {
+  font-weight: bold;
+  color: #39215B;
+}
+
+.report-url {
+  color: #0d386e;
+  text-decoration: none;
+  font-size: 0.95rem;
+  word-break: break-all;
+}
+
+.view-btn {
+  background-color: #39215B;
+  color: white;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.view-btn:hover {
+  background-color: #291042;
+}
+
+.report-output {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #fffef7;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.seo-table-markdown {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.seo-table-markdown th,
+.seo-table-markdown td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.seo-table-markdown th {
+  background-color: #0d386e;
+  color: white;
+}
+
+.report-content {
+  margin-top: 1rem;
+  white-space: pre-wrap;
+  background: #f5f5f5;
+  padding: 1rem;
+  border-radius: 5px;
+  font-size: 0.95rem;
+}
+
+
+
+
+
+.seo-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.seo-table th,
+.seo-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  vertical-align: top;
+  text-align: left;
+}
+
+.seo-table th {
+  background-color: #f3f3f3;
+  font-weight: bold;
+  color: #222;
+}
+
+
+
+
+
+.table-wrapper {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.seo-table-markdown {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.seo-table-markdown th,
+.seo-table-markdown td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  vertical-align: top;
+}
+
+.seo-table-markdown th {
+  background-color: #f3f3f3;
+  font-weight: bold;
+  text-align: left;
+}
+
+
+
+.seo-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.seo-table th,
+.seo-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  vertical-align: top;
+  text-align: left;
+}
+
+.seo-table th {
+  background-color: #f3f3f3;
+  font-weight: bold;
+  color: #222;
+}
