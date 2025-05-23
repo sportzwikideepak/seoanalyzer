@@ -18,6 +18,7 @@ import FunnyCommentaryDeepSeek from './FunnyCommentaryDeepSeek.jsx';
 import GscAiReports from './GscAiReports.jsx';
 import './index.css';
 import GscContentRefreshReports from './GscContentRefreshReports.jsx';
+import GscLowCtrFixes from './GscLowCtrFixes.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -31,6 +32,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/saved" element={<DeepSeekReports />} />
         <Route path="/gsc/ai-reports" element={<GscAiReports />} />
         <Route path="/gsc/content-refresh" element={<GscContentRefreshReports />} />
+<Route path="/gsc/low-ctr" element={<GscLowCtrFixes />} />
 
 
         
