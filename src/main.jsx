@@ -21,6 +21,7 @@ import GscContentRefreshReports from './GscContentRefreshReports.jsx';
 import GscLowCtrFixes from './GscLowCtrFixes.jsx';
 import GscTrendingKeywords from './GscTrendingKeywords.jsx';
 import GscRankingWatchdog from './GscRankingWatchdog.jsx';
+import GscContentQueryMatch from './GscContentQueryMatch.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -37,7 +38,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/gsc/low-ctr" element={<GscLowCtrFixes />} />
         <Route path="/gsc/trending-keywords" element={<GscTrendingKeywords />} />
         <Route path="/gsc/ranking-watchdog" element={<GscRankingWatchdog />} />
-
+        <Route path="/gsc/content-query-match" element={<GscContentQueryMatch />} />
 
         
 {/* <Route path="/funny-commentary" element={<FunnyCommentaryDeepSeek matchId="88324" inningNumber={1} />} /> */}
