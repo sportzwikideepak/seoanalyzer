@@ -1,13 +1,4 @@
-// import React from 'react';
-// import ReactDOM from 'react-dom/client';
-// import App from './App.jsx';     // <-- Make sure this matches the file
-// import './App.css';
 
-// ReactDOM.createRoot(document.getElementById('root')).render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>,
-// );
 
 
 
@@ -17,10 +8,16 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App.jsx';
 import SavedReports from './SavedReports.jsx'; // <-- Import new component
-import './App.css';
+// import './App.css';
 import GSCQueries from './GSCQueries.jsx';
 import GSCInsight from './GSCInsight.jsx';
 import DeepSeekReports from './DeepSeekReports.jsx';
+import FunnyCommentary from './FunnyCommentary.jsx';
+import FunnyCommentaryCompareBox from './FunnyCommentary.jsx';
+import FunnyCommentaryDeepSeek from './FunnyCommentaryDeepSeek.jsx';
+import GscAiReports from './GscAiReports.jsx';
+import './index.css';
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -31,6 +28,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/gsc" element={<GSCQueries />} />
         <Route path="/gsc/insight" element={<GSCInsight />} />
         <Route path="/saved" element={<DeepSeekReports />} />
+        <Route path="/gsc/ai-reports" element={<GscAiReports />} />
+
+        
+{/* <Route path="/funny-commentary" element={<FunnyCommentaryDeepSeek matchId="88324" inningNumber={1} />} /> */}
 
 
 

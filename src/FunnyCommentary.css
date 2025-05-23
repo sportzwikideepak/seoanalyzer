@@ -1,0 +1,45 @@
+/* .funny-commentary-container {
+  max-width: 850px;
+  margin: auto;
+  padding: 1rem;
+  font-family: Arial, sans-serif;
+}
+
+.commentary-card {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-left: 5px solid #39215B;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.commentary-card h4 {
+  margin: 0 0 0.4rem 0;
+  color: #333;
+} */
+
+
+.funny-commentary-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 1rem;
+  font-family: sans-serif;
+}
+
+.provider-selector {
+  margin-bottom: 1rem;
+}
+
+.commentary-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+
+.commentary-card h4 {
+  margin-bottom: 0.5rem;
+}
