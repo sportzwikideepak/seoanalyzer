@@ -17,6 +17,7 @@ import FunnyCommentaryCompareBox from './FunnyCommentary.jsx';
 import FunnyCommentaryDeepSeek from './FunnyCommentaryDeepSeek.jsx';
 import GscAiReports from './GscAiReports.jsx';
 import './index.css';
+import GscContentRefreshReports from './GscContentRefreshReports.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -29,6 +30,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/gsc/insight" element={<GSCInsight />} />
         <Route path="/saved" element={<DeepSeekReports />} />
         <Route path="/gsc/ai-reports" element={<GscAiReports />} />
+        <Route path="/gsc/content-refresh" element={<GscContentRefreshReports />} />
+
 
         
 {/* <Route path="/funny-commentary" element={<FunnyCommentaryDeepSeek matchId="88324" inningNumber={1} />} /> */}
