@@ -20,6 +20,7 @@ import './index.css';
 import GscContentRefreshReports from './GscContentRefreshReports.jsx';
 import GscLowCtrFixes from './GscLowCtrFixes.jsx';
 import GscTrendingKeywords from './GscTrendingKeywords.jsx';
+import GscRankingWatchdog from './GscRankingWatchdog.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -35,7 +36,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/gsc/content-refresh" element={<GscContentRefreshReports />} />
         <Route path="/gsc/low-ctr" element={<GscLowCtrFixes />} />
         <Route path="/gsc/trending-keywords" element={<GscTrendingKeywords />} />
-
+        <Route path="/gsc/ranking-watchdog" element={<GscRankingWatchdog />} />
 
 
         
