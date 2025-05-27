@@ -90,7 +90,7 @@ function GscTrendingKeywords() {
   return (
     <div style={{ padding: 16, backgroundColor: '#f9fafb', minHeight: '100vh', fontFamily: 'sans-serif' }}>
       <h1 style={{ fontSize: 28, fontWeight: 'bold', textAlign: 'center', color: '#4f46e5', marginBottom: 32 }}>
-        🚀 Trending Keyword Content Ideas
+         Trending Keyword Content Ideas
       </h1>
 
       <div style={{ maxWidth: 1200, margin: '0 auto', background: '#fff', padding: 20, borderRadius: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
