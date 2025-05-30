@@ -56,7 +56,6 @@
 
 
 
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -78,7 +77,6 @@ function GscTrendingKeywords() {
 
   const formatMarkdown = (text) => {
     if (!text) return 'No suggestions available.';
-
     return text
       .replace(/^(\d+\.\s+.*)/gm, '<h3 style="font-weight: 700; color: #374151; margin-bottom: 6px;">$1</h3>')
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -90,7 +88,7 @@ function GscTrendingKeywords() {
   return (
     <div style={{ padding: 16, backgroundColor: '#f9fafb', minHeight: '100vh', fontFamily: 'sans-serif' }}>
       <h1 style={{ fontSize: 28, fontWeight: 'bold', textAlign: 'center', color: '#4f46e5', marginBottom: 32 }}>
-         Trending Keyword Content Ideas
+        📊 Trending Keyword Content Ideas
       </h1>
 
       <div style={{ maxWidth: 1200, margin: '0 auto', background: '#fff', padding: 20, borderRadius: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
@@ -102,35 +100,40 @@ function GscTrendingKeywords() {
                 <th>Keyword 1</th>
                 <th>Keyword 2</th>
                 <th>Keyword 3</th>
+                <th>Published</th>
                 <th>More</th>
               </tr>
             </thead>
             <tbody>
-              {reports.map((r, i) => (
-                <React.Fragment key={r.id || i}>
-                  <tr style={{ borderBottom: '1px solid #eee' }}>
-                    <td>{i + 1}</td>
-                    <td>{r.keyword_1}</td>
-                    <td>{r.keyword_2}</td>
-                    <td>{r.keyword_3}</td>
-                    <td>
-                      <button onClick={() => toggleDropdown(r.id || i)} style={{ color: '#4f46e5', background: 'none', border: 'none', fontWeight: '500', cursor: 'pointer' }}>
-                        Details {openDropdownId === (r.id || i) ? '⬆️' : '⬇️'}
-                      </button>
-                    </td>
-                  </tr>
-                  {openDropdownId === (r.id || i) && (
-                    <tr>
-                      <td colSpan="5">
-                        <div style={{ marginTop: 10, background: '#f9f9fc', padding: 16, borderRadius: 8, boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-                          <h3 style={{ fontWeight: 'bold', fontSize: 16, color: '#7c3aed', marginBottom: 8 }}>🧠 AI Suggestions</h3>
-                          <div dangerouslySetInnerHTML={{ __html: formatMarkdown(r.ai_output) }} style={{ color: '#374151' }} />
-                        </div>
+              {reports.map((r, i) => {
+                const keywords = Array.isArray(r.keywords_json) ? r.keywords_json : JSON.parse(r.keywords_json || '[]');
+                return (
+                  <React.Fragment key={r.id || i}>
+                    <tr style={{ borderBottom: '1px solid #eee' }}>
+                      <td>{i + 1}</td>
+                      <td>{keywords[0] || '-'}</td>
+                      <td>{keywords[1] || '-'}</td>
+                      <td>{keywords[2] || '-'}</td>
+                      <td>{new Date(r.created_at).toLocaleDateString()}</td>
+                      <td>
+                        <button onClick={() => toggleDropdown(r.id || i)} style={{ color: '#4f46e5', background: 'none', border: 'none', fontWeight: '500', cursor: 'pointer' }}>
+                          Details {openDropdownId === (r.id || i) ? '⬆️' : '⬇️'}
+                        </button>
                       </td>
                     </tr>
-                  )}
-                </React.Fragment>
-              ))}
+                    {openDropdownId === (r.id || i) && (
+                      <tr>
+                        <td colSpan="6">
+                          <div style={{ marginTop: 10, background: '#f9f9fc', padding: 16, borderRadius: 8, boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                            <h3 style={{ fontWeight: 'bold', fontSize: 16, color: '#7c3aed', marginBottom: 8 }}>🧠 AI Suggestions</h3>
+                            <div dangerouslySetInnerHTML={{ __html: formatMarkdown(r.ai_output) }} style={{ color: '#374151' }} />
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                );
+              })}
             </tbody>
           </table>
         )}

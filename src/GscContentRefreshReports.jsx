@@ -115,11 +115,6 @@
 
 
 
-
-
-
-
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -154,7 +149,6 @@ function GscContentRefreshReports() {
 
   const formatMarkdown = (text) => {
     if (!text) return 'No suggestions available.';
-
     return text
       .replace(/^(\d+\.\s+.*)/gm, '<h3 style="font-weight: 700; color: #374151; margin-bottom: 6px;">$1</h3>')
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -162,6 +156,15 @@ function GscContentRefreshReports() {
       .replace(/---/g, '<hr style="margin: 16px 0; border-color: #e5e7eb;" />')
       .replace(/[\*#]+/g, '')
       .replace(/\n/g, '<br />');
+  };
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '-';
+    return new Date(dateStr).toLocaleDateString('en-IN', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
   };
 
   return (
@@ -196,11 +199,17 @@ function GscContentRefreshReports() {
                   {reports.map((r, i) => (
                     <React.Fragment key={r.id || i}>
                       <tr style={{ borderBottom: '1px solid #f3f4f6' }}>
-                        <td>{(page - 1) * 80 + i + 1}</td> {/* ✅ Global serial number */}
+                        <td>{(page - 1) * 80 + i + 1}</td>
                         <td>
-                          <a href={r.url} style={{ color: '#2563eb', textDecoration: 'underline', display: 'block', wordBreak: 'break-word' }} target="_blank" rel="noopener noreferrer">
+                          <a href={r.url} target="_blank" rel="noopener noreferrer"
+                             style={{ color: '#2563eb', textDecoration: 'underline', display: 'block', wordBreak: 'break-word' }}>
                             {r.url}
                           </a>
+                          <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                            {r.article_published_at
+                              ? `Published: ${formatDate(r.article_published_at)}`
+                              : `Detected: ${formatDate(r.created_at)}`}
+                          </div>
                         </td>
                         <td>{r.keyword}</td>
                         <td>{r.old_position.toFixed(2)}</td>
@@ -208,7 +217,8 @@ function GscContentRefreshReports() {
                         <td>{r.old_clicks}</td>
                         <td>{r.new_clicks}</td>
                         <td>
-                          <button onClick={() => toggleDropdown(r.id || i)} style={{ color: '#4f46e5', background: 'none', border: 'none', fontWeight: '500', cursor: 'pointer' }}>
+                          <button onClick={() => toggleDropdown(r.id || i)}
+                                  style={{ color: '#4f46e5', background: 'none', border: 'none', fontWeight: '500', cursor: 'pointer' }}>
                             Details {openDropdownId === (r.id || i) ? '⬆️' : '⬇️'}
                           </button>
                         </td>

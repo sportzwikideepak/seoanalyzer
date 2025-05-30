@@ -250,13 +250,25 @@ function GscAiReports() {
                               color: "#2563eb",
                               textDecoration: "underline",
                               display: "block",
-                              wordBreak: "break-all",
+                              wordBreak: "break-word",
                             }}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
                             {r.url}
                           </a>
+                          <div
+                            style={{
+                              fontSize: "12px",
+                              color: "#6b7280",
+                              marginTop: "4px",
+                            }}
+                          >
+                            <strong>Published:</strong>{" "}
+                            {r.article_published_at
+                              ? new Date(r.article_published_at).toLocaleDateString()
+                              : "Not Available"}
+                          </div>
                         </td>
                         <td>{r.impressions}</td>
                         <td>{r.clicks}</td>
@@ -305,7 +317,7 @@ function GscAiReports() {
                                 style={{
                                   fontSize: "14px",
                                   color: "#6b7280",
-                                  marginBottom: "12px",
+                                  marginBottom: "4px",
                                 }}
                               >
                                 <strong>URL:</strong>{" "}
@@ -320,6 +332,18 @@ function GscAiReports() {
                                 >
                                   {r.url}
                                 </a>
+                              </p>
+                              <p
+                                style={{
+                                  fontSize: "14px",
+                                  color: "#6b7280",
+                                  marginBottom: "12px",
+                                }}
+                              >
+                                <strong>Published:</strong>{" "}
+                                {r.article_published_at
+                                  ? new Date(r.article_published_at).toLocaleDateString()
+                                  : "Not Available"}
                               </p>
                               <div
                                 className="suggestions"
