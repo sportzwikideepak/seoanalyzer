@@ -22,7 +22,6 @@ import GscLowCtrFixes from './GscLowCtrFixes.jsx';
 import GscTrendingKeywords from './GscTrendingKeywords.jsx';
 import GscRankingWatchdog from './GscRankingWatchdog.jsx';
 import GscContentQueryMatch from './GscContentQueryMatch.jsx';
-import GscNewArticleRewrites from './GscNewArticleRewrites.jsx';
 
 
 
@@ -34,19 +33,25 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/saved-reports" element={<SavedReports />} />
         <Route path="/gsc" element={<GSCQueries />} />
         <Route path="/gsc/insight" element={<GSCInsight />} />
+        
+        
         <Route path="/saved" element={<DeepSeekReports />} />
+        
+        {/* //new tool */}
+        
         <Route path="/gsc/ai-reports" element={<GscAiReports />} />
          
          {/* //copy of gsc ai report */}
 
-         <Route path="/gsc/new-articles" element={<GscNewArticleRewrites />} />
-
-
-
-
-
 
         <Route path="/gsc/content-refresh" element={<GscContentRefreshReports />} />
+
+
+
+
+
+        
+        
         <Route path="/gsc/low-ctr" element={<GscLowCtrFixes />} />
         <Route path="/gsc/trending-keywords" element={<GscTrendingKeywords />} />
         <Route path="/gsc/ranking-watchdog" element={<GscRankingWatchdog />} />
