@@ -22,6 +22,7 @@ import GscLowCtrFixes from './GscLowCtrFixes.jsx';
 import GscTrendingKeywords from './GscTrendingKeywords.jsx';
 import GscRankingWatchdog from './GscRankingWatchdog.jsx';
 import GscContentQueryMatch from './GscContentQueryMatch.jsx';
+import ArticleSummaries from './ArticleSummaries.jsx';
 
 
 
@@ -60,6 +61,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         
 {/* <Route path="/funny-commentary" element={<FunnyCommentaryDeepSeek matchId="88324" inningNumber={1} />} /> */}
 
+<Route path="/article-summaries" element={<ArticleSummaries />} />
 
 
       </Routes>
