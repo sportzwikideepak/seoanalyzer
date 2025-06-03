@@ -1,13 +1,10 @@
-
-//pagination 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const API_BASE = "https://hammerhead-app-jkdit.ondigitalocean.app/api";
 
-function DeepSeekReports() {
+function ManualSeoReports() {
   const [reports, setReports] = useState([]);
-  const [search, setSearch] = useState("");
   const [selectedReportId, setSelectedReportId] = useState(null);
   const [selectedReportData, setSelectedReportData] = useState(null);
   const [page, setPage] = useState(1);
@@ -18,7 +15,7 @@ function DeepSeekReports() {
   }, [page]);
 
   const fetchReports = async (pageNum = 1) => {
-    const res = await axios.get(`${API_BASE}/deepseek-reports?page=${pageNum}`);
+    const res = await axios.get(`${API_BASE}/manual-seo-reports?page=${pageNum}`);
     setReports(res.data.data);
     setPage(res.data.page);
     setTotalPages(res.data.totalPages);
@@ -31,7 +28,7 @@ function DeepSeekReports() {
       return;
     }
 
-    const res = await axios.get(`${API_BASE}/deepseek-reports/${id}`);
+    const res = await axios.get(`${API_BASE}/manual-seo-reports/${id}`);
     setSelectedReportId(id);
     setSelectedReportData(res.data.data);
   };
@@ -91,35 +88,16 @@ function DeepSeekReports() {
     );
   };
 
-  const filtered = reports.filter((r) =>
-    r.url.toLowerCase().includes(search.toLowerCase())
-  );
-
   return (
     <div style={{ backgroundColor: '#f9fafb', minHeight: '100vh', padding: '16px', color: '#1f2937', fontFamily: 'sans-serif' }}>
       <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-        <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#4f46e5' }}>📚 DeepSeek SEO Reports</h1>
-        <p style={{ fontSize: '14px', color: '#6b7280' }}>Browse past SEO Gap analyses with AI-powered rewrites</p>
+        <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#4f46e5' }}>📘 Manual SEO Reports</h1>
+        <p style={{ fontSize: '14px', color: '#6b7280' }}>Review content analyzed before publishing</p>
       </div>
 
       <div style={{ maxWidth: '1280px', margin: 'auto' }}>
         <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', padding: '16px' }}>
-          <input
-            type="text"
-            placeholder="🔍 Search by URL..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              borderRadius: '6px',
-              border: '1px solid #e5e7eb',
-              marginBottom: '16px',
-              fontSize: '14px'
-            }}
-          />
-
-          {filtered.map((report, i) => {
+          {reports.map((report, i) => {
             const isOpen = selectedReportId === report.id;
             const parsed = isOpen && selectedReportData ? parseReport(selectedReportData.result) : {};
 
@@ -128,11 +106,10 @@ function DeepSeekReports() {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" }}>
                   <div style={{ maxWidth: "85%" }}>
                     <span style={{ fontSize: "14px", color: "#6b7280", fontWeight: 600 }}>
-                      {(page - 1) * 80 + i + 1}. #{report.id}
+                      {(page - 1) * 50 + i + 1}. #{report.id}
                     </span><br />
-                    <a href={report.url} target="_blank" rel="noreferrer" style={{ color: '#2563eb', textDecoration: 'underline', wordBreak: 'break-all' }}>
-                      {report.url}
-                    </a>
+                    <strong>{report.title}</strong><br />
+                    <span style={{ color: '#2563eb', wordBreak: 'break-all' }}>{report.url || "(no pre-publish slug)"}</span>
                   </div>
                   <button
                     onClick={() => handleSelectReport(report.id)}
@@ -151,7 +128,7 @@ function DeepSeekReports() {
 
                 {isOpen && (
                   <div style={{ marginTop: '16px', background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-                    <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#4b5563' }}>📊 SEO GAP TABLE</h3>
+                    <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#4b5563' }}>📊 SEO GAP REPORT</h3>
                     {renderMarkdownTable(parsed.tableMarkdown)}
 
                     <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#4b5563', marginTop: '20px' }}>✍️ Recommended Rewrite</h3>
@@ -205,4 +182,4 @@ function DeepSeekReports() {
   );
 }
 
-export default DeepSeekReports;
+export default ManualSeoReports;
