@@ -95,7 +95,7 @@ import ManualSeoAnalyzer from "./ManualSeoAnalyzer.jsx";
 import ManualSeoReports from "./ManualSeoReports.jsx";
 
 import "./index.css";
-import Login from "./LOGIN.JSX";
+import Login from "./login_tem.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

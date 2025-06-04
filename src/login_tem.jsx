@@ -52,6 +52,8 @@ export default function Login() {
     e.preventDefault();
     if (id === "admin" && password === "SPORTZ@123") {
       localStorage.setItem("auth", "true");
+        localStorage.setItem("login_time", new Date().toISOString()); // ✅ store login time
+
       navigate("/");
     } else {
       alert("❌ Invalid credentials. Try again.");
