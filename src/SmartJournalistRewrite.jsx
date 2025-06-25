@@ -173,7 +173,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DOMPurify from "dompurify";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://hammerhead-app-jkdit.ondigitalocean.app/api";
 
 // Helper function: cleans up markdown and formats text into readable HTML
 function formatArticle(raw) {
