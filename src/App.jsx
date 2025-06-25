@@ -334,16 +334,14 @@
 // };
 
 // export default App;
+import React, { useState } from "react";
+import { NavLink, Outlet } from "react-router-dom";
+import "./App.css";
 
+export default function App() {
+  const [open, setOpen] = useState(false);
 
-import React from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
-import "./App.css"; // Optional: use if you want custom styles
-
-const App = () => {
-  const location = useLocation();
-
-  const navLinks = [
+  const navItems = [
     { label: "Analyze Article", path: "/analyze-article" },
     { label: "Analyze Article Saved Reports", path: "/saved-reports" },
     { label: "Pre-Publish Article Analyze", path: "/prepublish" },
@@ -360,57 +358,36 @@ const App = () => {
   ];
 
   return (
-    <div style={{ display: "flex", height: "100vh", width: "100vw", overflow: "hidden" }}>
-      {/* Sidebar */}
-      <aside
-        style={{
-          width: "250px",
-          background: "#1F2937",
-          color: "white",
-          padding: "20px",
-          overflowY: "hidden", // remove sidebar scrollbar
-        }}
-      >
-        <h2 style={{ fontSize: "20px", marginBottom: "24px", fontWeight: "bold", color: "#FBBF24" }}>
-          🚀 Dashboard
-        </h2>
-        <nav>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-            {navLinks.map(({ label, path }) => (
-              <li key={path} style={{ marginBottom: "14px", borderBottom: "1px solid #374151", paddingBottom: "10px" }}>
-                <Link
+    <>
+      {/* Hamburger (mobile only) */}
+      <button className="hamburger" onClick={() => setOpen(!open)}>
+        <span></span><span></span><span></span>
+      </button>
+
+      <div className="layout-wrapper">
+        {/* Sidebar */}
+        <aside className={`sidebar ${open ? "open" : ""}`}>
+          <h2>🚀 Dashboard</h2>
+          <ul>
+            {navItems.map(({ label, path }) => (
+              <li key={path}>
+                <NavLink
                   to={path}
-                  style={{
-                    color: location.pathname === path ? "#FBBF24" : "white",
-                    textDecoration: "none",
-                    fontWeight: location.pathname === path ? "bold" : "normal",
-                    display: "block",
-                  }}
+                  onClick={() => setOpen(false)}
+                  className={({ isActive }) => (isActive ? "active" : "")}
                 >
                   {label}
-                </Link>
+                </NavLink>
               </li>
             ))}
           </ul>
-        </nav>
-      </aside>
+        </aside>
 
-      {/* Main Content */}
-      <main
-        style={{
-          flex: 1,
-          padding: "24px",
-          background: "#F3F4F6",
-          height: "100vh",
-          overflowY: "auto",
-          overflowX: "hidden",
-          width: "100%",
-        }}
-      >
-        <Outlet />
-      </main>
-    </div>
+        {/* Main content */}
+        <main className="main-content">
+          <Outlet />
+        </main>
+      </div>
+    </>
   );
-};
-
-export default App;
+}
