@@ -206,6 +206,7 @@ import AnalyzePublishArticle from "./AnalyzePublishArticle.jsx"; // ✅ you miss
 
 import "./index.css";
 import Login from "./login_tem.jsx";
+import PromptConsole from "./PromptConsole.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -239,6 +240,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="article-summaries" element={<ArticleSummaries />} />
           <Route path="chatbot" element={<Chatbot />} />
           <Route path="journalist-rewrite" element={<SmartJournalistRewrite />} />
+          <Route path="prompt-console" element={<PromptConsole />} />
+
         </Route>
       </Routes>
     </BrowserRouter>

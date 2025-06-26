@@ -355,6 +355,8 @@ export default function App() {
     { label: "Article Summaries", path: "/article-summaries" },
     { label: "Chatbot", path: "/chatbot" },
     { label: "Smart Rewrite", path: "/journalist-rewrite" },
+     { label: "Prompt Console", path: "/prompt-console" },
+
   ];
 
   return (
