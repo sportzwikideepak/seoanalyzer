@@ -356,6 +356,8 @@ export default function App() {
     { label: "Chatbot", path: "/chatbot" },
     { label: "Smart Rewrite", path: "/journalist-rewrite" },
      { label: "Prompt Console", path: "/prompt-console" },
+    { label: "Convert to Hindi",             path: "/hindi-converter" },  
+
 
   ];
 

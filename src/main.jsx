@@ -203,6 +203,7 @@ import ManualSeoReports from "./ManualSeoReports.jsx";
 import Chatbot from "./Chatbot_use.jsx";
 import SmartJournalistRewrite from "./SmartJournalistRewrite.jsx";
 import AnalyzePublishArticle from "./AnalyzePublishArticle.jsx"; // ✅ you missed this import
+import TranslatePublishArticle from "./TranslatePublishArticle.jsx";  // 🆕 Hindi converter
 
 import "./index.css";
 import Login from "./login_tem.jsx";
@@ -241,6 +242,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="chatbot" element={<Chatbot />} />
           <Route path="journalist-rewrite" element={<SmartJournalistRewrite />} />
           <Route path="prompt-console" element={<PromptConsole />} />
+          <Route path="hindi-converter" element={<TranslatePublishArticle />} />  {/* 🆕 */}
+
 
         </Route>
       </Routes>
