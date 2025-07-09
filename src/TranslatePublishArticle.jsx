@@ -11,8 +11,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";            // you already have basic styles here
 
-// const API_BASE = "https://hammerhead-app-jkdit.ondigitalocean.app/api";
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://hammerhead-app-jkdit.ondigitalocean.app/api";
+// const API_BASE = "http://localhost:5000/api";
 
 
 export default function TranslatePublishArticle() {
