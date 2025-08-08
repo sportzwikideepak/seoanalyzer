@@ -346,19 +346,17 @@ export default function App() {
     { label: "Analyze Article Saved Reports", path: "/saved-reports" },
     { label: "Pre-Publish Article Analyze", path: "/prepublish" },
     { label: "Pre-Publish Article Saved Report", path: "/prepublishreport" },
+    { label: "Article Summaries", path: "/article-summaries" },
+    { label: "Chatbot", path: "/chatbot" },
+    { label: "Smart Rewrite", path: "/journalist-rewrite" },
+    { label: "Prompt Console", path: "/prompt-console" },
     { label: "GSC AI Reports", path: "/gsc/ai-reports" },
     { label: "Content Refresh", path: "/gsc/content-refresh" },
     { label: "Low CTR Fixes", path: "/gsc/low-ctr" },
     { label: "Ranking Watchdog", path: "/gsc/ranking-watchdog" },
     { label: "Content-Query Match", path: "/gsc/content-query-match" },
     { label: "Trending Keywords", path: "/gsc/trending-keywords" },
-    { label: "Article Summaries", path: "/article-summaries" },
-    { label: "Chatbot", path: "/chatbot" },
-    { label: "Smart Rewrite", path: "/journalist-rewrite" },
-     { label: "Prompt Console", path: "/prompt-console" },
-    { label: "Convert to Hindi",             path: "/hindi-converter" },  
-
-
+    { label: "Hindi GSC Reports", path: "/hindi-gsc-reports" },
   ];
 
   return (
@@ -372,6 +370,7 @@ export default function App() {
         {/* Sidebar */}
         <aside className={`sidebar ${open ? "open" : ""}`}>
           <h2>🚀 Dashboard</h2>
+          
           <ul>
             {navItems.map(({ label, path }) => (
               <li key={path}>

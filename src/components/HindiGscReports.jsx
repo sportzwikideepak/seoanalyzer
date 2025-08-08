@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useOutletContext } from 'react-router-dom';
 
-function GscAiReports() {
+function HindiGscReports() {
+  const { config } = useOutletContext() || {};
+  
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openDropdownId, setOpenDropdownId] = useState(null);
@@ -16,13 +19,13 @@ function GscAiReports() {
     setLoading(true);
     try {
       const res = await axios.get(
-        `https://hammerhead-app-jkdit.ondigitalocean.app/api/gsc-ai-reports?page=${pageNum}`
+        `https://hammerhead-app-jkdit.ondigitalocean.app/api/gsc/hi/ai-reports?page=${pageNum}`
       );
       setReports(res.data.data || []);
       setPage(res.data.page);
       setTotalPages(res.data.totalPages);
     } catch (err) {
-      console.error("❌ Failed to fetch reports:", err);
+      console.error("❌ Failed to fetch Hindi reports:", err);
     } finally {
       setLoading(false);
     }
@@ -33,7 +36,7 @@ function GscAiReports() {
   };
 
   const formatMarkdown = (text) => {
-    if (!text) return "No suggestions available.";
+    if (!text) return "कोई सुझाव उपलब्ध नहीं है।";
 
     return text
       .replace(
@@ -69,7 +72,7 @@ function GscAiReports() {
             marginBottom: "4px",
           }}
         >
-          📈 GSC AI Recommendations
+          📈 GSC AI सिफारिशें (Hindi)
         </h1>
         <p
           style={{
@@ -78,7 +81,7 @@ function GscAiReports() {
             marginBottom: "8px",
           }}
         >
-          Based on Google Search Console + AI SEO Insights
+          Google Search Console + AI SEO Insights के आधार पर
         </p>
         <div
           style={{
@@ -90,7 +93,7 @@ function GscAiReports() {
             display: "inline-block",
           }}
         >
-          Cricket Addictor (English) • https://cricketaddictor.com
+          {config?.propertyName || "Cricket Addictor (Hindi)"} • {config?.propertyUrl || "https://hindi.cricketaddictor.com"}
         </div>
       </div>
 
@@ -103,7 +106,7 @@ function GscAiReports() {
             color: "#6b7280",
           }}
         >
-          Loading...
+          लोड हो रहा है...
         </div>
       ) : reports.length === 0 ? (
         <div
@@ -114,7 +117,7 @@ function GscAiReports() {
             color: "#6b7280",
           }}
         >
-          No data found
+          कोई डेटा नहीं मिला
         </div>
       ) : (
         <>
@@ -165,13 +168,13 @@ function GscAiReports() {
                       }}
                     >
                       <div>
-                        <span style={{ color: "#6b7280" }}>Impressions:</span>{" "}
+                        <span style={{ color: "#6b7280" }}>इम्प्रेशन्स:</span>{" "}
                         <span style={{ fontWeight: "600" }}>
                           {report.impressions?.toLocaleString()}
                         </span>
                       </div>
                       <div>
-                        <span style={{ color: "#6b7280" }}>Clicks:</span>{" "}
+                        <span style={{ color: "#6b7280" }}>क्लिक्स:</span>{" "}
                         <span style={{ fontWeight: "600" }}>
                           {report.clicks?.toLocaleString()}
                         </span>
@@ -183,7 +186,7 @@ function GscAiReports() {
                         </span>
                       </div>
                       <div>
-                        <span style={{ color: "#6b7280" }}>Position:</span>{" "}
+                        <span style={{ color: "#6b7280" }}>पोजीशन:</span>{" "}
                         <span style={{ fontWeight: "600" }}>
                           {report.position?.toFixed(1)}
                         </span>
@@ -203,7 +206,7 @@ function GscAiReports() {
                       fontWeight: "500",
                     }}
                   >
-                    {openDropdownId === report.id ? 'Hide' : 'View'}
+                    {openDropdownId === report.id ? 'छिपाएं' : 'देखें'}
                   </button>
                 </div>
 
@@ -256,10 +259,10 @@ function GscAiReports() {
                   cursor: page === 1 ? "not-allowed" : "pointer",
                 }}
               >
-                Previous
+                पिछला
               </button>
               <span style={{ color: "#6b7280" }}>
-                Page {page} of {totalPages}
+                पेज {page} का {totalPages}
               </span>
               <button
                 onClick={() => setPage(Math.min(totalPages, page + 1))}
@@ -273,7 +276,7 @@ function GscAiReports() {
                   cursor: page === totalPages ? "not-allowed" : "pointer",
                 }}
               >
-                Next
+                अगला
               </button>
             </div>
           )}
@@ -283,4 +286,4 @@ function GscAiReports() {
   );
 }
 
-export default GscAiReports;
+export default HindiGscReports;

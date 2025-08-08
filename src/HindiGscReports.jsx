@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function GscAiReports() {
+function HindiGscReports() {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openDropdownId, setOpenDropdownId] = useState(null);
@@ -16,13 +16,13 @@ function GscAiReports() {
     setLoading(true);
     try {
       const res = await axios.get(
-        `https://hammerhead-app-jkdit.ondigitalocean.app/api/gsc-ai-reports?page=${pageNum}`
+        `http://localhost:5000/api/gsc/hi/ai-reports?page=${pageNum}`
       );
       setReports(res.data.data || []);
       setPage(res.data.page);
       setTotalPages(res.data.totalPages);
     } catch (err) {
-      console.error("❌ Failed to fetch reports:", err);
+      console.error("❌ Failed to fetch Hindi reports:", err);
     } finally {
       setLoading(false);
     }
@@ -33,7 +33,7 @@ function GscAiReports() {
   };
 
   const formatMarkdown = (text) => {
-    if (!text) return "No suggestions available.";
+    if (!text) return "कोई सुझाव उपलब्ध नहीं है।";
 
     return text
       .replace(
@@ -45,6 +45,27 @@ function GscAiReports() {
       .replace(/---/g, '<hr style="margin: 16px 0; border-color: #e5e7eb;" />')
       .replace(/[\*#]+/g, "")
       .replace(/\n/g, "<br />");
+  };
+
+  // Helper function to safely format position
+  const formatPosition = (position) => {
+    if (position === null || position === undefined) return "N/A";
+    const num = parseFloat(position);
+    return isNaN(num) ? "N/A" : num.toFixed(1);
+  };
+
+  // Helper function to safely format CTR
+  const formatCTR = (ctr) => {
+    if (ctr === null || ctr === undefined) return "0.00%";
+    const num = parseFloat(ctr);
+    return isNaN(num) ? "0.00%" : (num * 100).toFixed(2) + "%";
+  };
+
+  // Helper function to safely format numbers
+  const formatNumber = (num) => {
+    if (num === null || num === undefined) return "0";
+    const parsed = parseFloat(num);
+    return isNaN(parsed) ? "0" : parsed.toLocaleString();
   };
 
   return (
@@ -69,7 +90,7 @@ function GscAiReports() {
             marginBottom: "4px",
           }}
         >
-          📈 GSC AI Recommendations
+          📈  CA Hindi GSC AI Reports
         </h1>
         <p
           style={{
@@ -78,7 +99,7 @@ function GscAiReports() {
             marginBottom: "8px",
           }}
         >
-          Based on Google Search Console + AI SEO Insights
+          Google Search Console + AI SEO Insights for Hindi Domain
         </p>
         <div
           style={{
@@ -90,7 +111,7 @@ function GscAiReports() {
             display: "inline-block",
           }}
         >
-          Cricket Addictor (English) • https://cricketaddictor.com
+          Cricket Addictor (Hindi) • https://hindi.cricketaddictor.com
         </div>
       </div>
 
@@ -167,25 +188,25 @@ function GscAiReports() {
                       <div>
                         <span style={{ color: "#6b7280" }}>Impressions:</span>{" "}
                         <span style={{ fontWeight: "600" }}>
-                          {report.impressions?.toLocaleString()}
+                          {formatNumber(report.impressions)}
                         </span>
                       </div>
                       <div>
                         <span style={{ color: "#6b7280" }}>Clicks:</span>{" "}
                         <span style={{ fontWeight: "600" }}>
-                          {report.clicks?.toLocaleString()}
+                          {formatNumber(report.clicks)}
                         </span>
                       </div>
                       <div>
                         <span style={{ color: "#6b7280" }}>CTR:</span>{" "}
                         <span style={{ fontWeight: "600" }}>
-                          {((report.ctr || 0) * 100).toFixed(2)}%
+                          {formatCTR(report.ctr)}
                         </span>
                       </div>
                       <div>
                         <span style={{ color: "#6b7280" }}>Position:</span>{" "}
                         <span style={{ fontWeight: "600" }}>
-                          {report.position?.toFixed(1)}
+                          {formatPosition(report.position)}
                         </span>
                       </div>
                     </div>
@@ -283,4 +304,4 @@ function GscAiReports() {
   );
 }
 
-export default GscAiReports;
+export default HindiGscReports;
