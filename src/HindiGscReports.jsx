@@ -16,7 +16,7 @@ function HindiGscReports() {
     setLoading(true);
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/gsc/hi/ai-reports?page=${pageNum}`
+        `https://hammerhead-app-jkdit.ondigitalocean.app/api/gsc/hi/ai-reports?page=${pageNum}`
       );
       setReports(res.data.data || []);
       setPage(res.data.page);
