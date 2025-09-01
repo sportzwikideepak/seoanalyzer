@@ -357,6 +357,10 @@ export default function App() {
     { label: "Content-Query Match", path: "/gsc/content-query-match" },
     { label: "Trending Keywords", path: "/gsc/trending-keywords" },
     { label: "Hindi GSC Reports", path: "/hindi-gsc-reports" },
+    { label: "Hindi Content Refresh", path: "/hindi-content-refresh" },
+    { label: "Hindi Low CTR Fixes", path: "/hindi-low-ctr" },
+    { label: "Hindi Ranking Watchdog", path: "/hindi-ranking-watchdog" },
+    { label: "Hindi Content Query Match", path: "/hindi-content-query-match" },
   ];
 
   return (

@@ -24,6 +24,10 @@ import SmartJournalistRewrite from "./SmartJournalistRewrite.jsx";
 import AnalyzePublishArticle from "./AnalyzePublishArticle.jsx";
 import TranslatePublishArticle from "./TranslatePublishArticle.jsx";
 import HindiGscReports from "./HindiGscReports.jsx";
+import HindiGscContentRefresh from "./HindiGscContentRefresh.jsx";
+import HindiGscLowCtr from "./HindiGscLowCtr.jsx";
+import HindiGscRankingWatchdog from "./HindiGscRankingWatchdog.jsx";
+import HindiGscContentQueryMatch from "./HindiGscContentQueryMatch.jsx";
 
 import "./index.css";
 import Login from "./login_tem.jsx";
@@ -64,8 +68,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="gsc/ranking-watchdog" element={<GscRankingWatchdog />} />
           <Route path="gsc/content-query-match" element={<GscContentQueryMatch />} />
 
-          {/* Hindi GSC Route */}
+          {/* Hindi GSC Routes */}
           <Route path="hindi-gsc-reports" element={<HindiGscReports />} />
+          <Route path="hindi-content-refresh" element={<HindiGscContentRefresh />} />
+          <Route path="hindi-low-ctr" element={<HindiGscLowCtr />} />
+          <Route path="hindi-ranking-watchdog" element={<HindiGscRankingWatchdog />} />
+          <Route path="hindi-content-query-match" element={<HindiGscContentQueryMatch />} />
         </Route>
       </Routes>
     </BrowserRouter>
