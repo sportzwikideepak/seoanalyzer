@@ -14,7 +14,7 @@ function HindiGscLowCtr() {
     setLoading(true);
     try {
       const res = await axios.get(
-        `https://hammerhead-app-jkdit.ondigitalocean.app/api/api/gsc/hi/low-ctr`
+        `https://hammerhead-app-jkdit.ondigitalocean.app/api/gsc/hi/low-ctr`
       );
       setReports(res.data.data || []);
     } catch (err) {
