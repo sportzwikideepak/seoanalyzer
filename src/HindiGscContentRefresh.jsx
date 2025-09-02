@@ -16,7 +16,7 @@ function HindiGscContentRefresh() {
     setLoading(true);
     try {
       const res = await axios.get(
-        `https://hammerhead-app-jkdit.ondigitalocean.app/api/api/gsc/hi/content-refresh?page=${pageNum}`
+        `https://hammerhead-app-jkdit.ondigitalocean.app/api/gsc/hi/content-refresh?page=${pageNum}`
       );
       setReports(res.data.data || []);
       setPage(res.data.page);
