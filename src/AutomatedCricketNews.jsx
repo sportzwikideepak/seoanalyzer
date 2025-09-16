@@ -1,0 +1,596 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const AutomatedCricketNews = () => {
+  const [articles, setArticles] = useState([]);
+  const [selectedArticles, setSelectedArticles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const [results, setResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('cricket');
+  const [maxArticles, setMaxArticles] = useState(25);
+  const [processingArticle, setProcessingArticle] = useState('');
+
+  // Your deployed backend URL
+  const DEPLOYED_BACKEND_URL = "https://hammerhead-app-jkdit.ondigitalocean.app";
+  
+  // GNews API Configuration
+  const GNEWS_API_KEY = "10221c352c3324d296732745fffffe4c";
+  const GNEWS_BASE_URL = "https://gnews.io/api/v4/search";
+
+  // Fetch cricket news directly from GNews API
+  const fetchNews = async () => {
+    setLoading(true);
+    try {
+      const url = new URL(GNEWS_BASE_URL);
+      url.searchParams.append("q", searchQuery);
+      url.searchParams.append("lang", "en");
+      url.searchParams.append("country", "in");
+      url.searchParams.append("max", maxArticles.toString());
+      url.searchParams.append("expand", "content");
+      url.searchParams.append("apikey", GNEWS_API_KEY);
+      
+      const response = await axios.get(url.toString());
+      
+      if (response.data && response.data.articles) {
+        const filteredArticles = response.data.articles.filter(article => 
+          article.content && 
+          article.content.length > 500 && 
+          !article.title.toLowerCase().includes('betting') &&
+          !article.title.toLowerCase().includes('gambling') &&
+          !article.title.toLowerCase().includes('casino')
+        );
+
+        const processedArticles = filteredArticles.map(article => ({
+          ...article,
+          summary: article.content ? article.content.substring(0, 200) + "..." : article.description,
+          validation: {
+            isValid: article.content && article.content.length > 300 && article.title && article.title.length > 10
+          },
+          wordCount: article.content ? article.content.split(' ').length : 0
+        }));
+
+        setArticles(processedArticles);
+        setSelectedArticles([]);
+        setResults([]);
+      } else {
+        alert('No articles found. Try a different search term.');
+      }
+    } catch (error) {
+      console.error('Error fetching news:', error);
+      alert(`Error fetching news: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Process selected articles
+  const processSelectedArticles = async () => {
+    if (selectedArticles.length === 0) return;
+
+    setProcessing(true);
+    const processedResults = [];
+
+    for (const articleIndex of selectedArticles) {
+      const article = articles[articleIndex];
+      setProcessingArticle(`Processing: ${article.title.substring(0, 50)}...`);
+      
+      try {
+        const response = await axios.post(`${DEPLOYED_BACKEND_URL}/api/get-ready-article`, {
+          title: article.title,
+          description: article.description,
+          content: article.content
+        });
+
+        if (response.data && response.data.success) {
+          // Clean the article content - remove AI patterns
+          let cleanArticle = response.data.readyToPublishArticle;
+          
+          // Remove AI patterns
+          cleanArticle = cleanArticle.replace(/Of course\. Here is a complete, ready-to-publish cricket article crafted from your content\./gi, '');
+          cleanArticle = cleanArticle.replace(/optimized for engagement and search engines\./gi, '');
+          cleanArticle = cleanArticle.replace(/Stay updated with the latest cricket news and analysis from the Asia Cup\./gi, '');
+          cleanArticle = cleanArticle.replace(/\*Stay updated with the latest cricket news and analysis from the Asia Cup\.\*/gi, '');
+          
+          // Remove markdown formatting
+          cleanArticle = cleanArticle.replace(/\*\*(.*?)\*\*/g, '$1');
+          cleanArticle = cleanArticle.replace(/\*(.*?)\*/g, '$1');
+          cleanArticle = cleanArticle.replace(/#{1,6}\s*/g, '');
+          cleanArticle = cleanArticle.replace(/\*\s*/g, '');
+          cleanArticle = cleanArticle.replace(/\n\*\*\*/g, '\n\n');
+          cleanArticle = cleanArticle.replace(/\*\*\*/g, '');
+          
+          // Remove template sections
+          cleanArticle = cleanArticle.replace(/\*\*Meta Title:\*\*/gi, '');
+          cleanArticle = cleanArticle.replace(/\*\*Meta Description:\*\*/gi, '');
+          cleanArticle = cleanArticle.replace(/The Incident That Sparked/gi, '');
+          cleanArticle = cleanArticle.replace(/The ICC's Rebuttal/gi, '');
+          cleanArticle = cleanArticle.replace(/Internal PCB Miscommunication/gi, '');
+          cleanArticle = cleanArticle.replace(/In a surprising twist/gi, '');
+          cleanArticle = cleanArticle.replace(/The fallout.*has been swift/gi, '');
+          
+          // Remove more AI patterns
+          cleanArticle = cleanArticle.replace(/Here is a complete, ready-to-publish cricket article/gi, '');
+          cleanArticle = cleanArticle.replace(/crafted from your content/gi, '');
+          cleanArticle = cleanArticle.replace(/designed to be professional, engaging/gi, '');
+          cleanArticle = cleanArticle.replace(/optimized for both readers and search engines/gi, '');
+          cleanArticle = cleanArticle.replace(/Format it with proper headings, subheadings, and structure/gi, '');
+          cleanArticle = cleanArticle.replace(/Make it sound human and natural, not AI-generated/gi, '');
+          
+          // Remove template phrases
+          cleanArticle = cleanArticle.replace(/The incident highlights/gi, '');
+          cleanArticle = cleanArticle.replace(/This development comes/gi, '');
+          cleanArticle = cleanArticle.replace(/The controversy began/gi, '');
+          cleanArticle = cleanArticle.replace(/In response to/gi, '');
+          cleanArticle = cleanArticle.replace(/The decision marks/gi, '');
+          cleanArticle = cleanArticle.replace(/This move comes/gi, '');
+          cleanArticle = cleanArticle.replace(/The announcement follows/gi, '');
+          
+          // Remove AI conclusion patterns
+          cleanArticle = cleanArticle.replace(/In conclusion/gi, '');
+          cleanArticle = cleanArticle.replace(/To summarize/gi, '');
+          cleanArticle = cleanArticle.replace(/Overall/gi, '');
+          cleanArticle = cleanArticle.replace(/In summary/gi, '');
+          cleanArticle = cleanArticle.replace(/It is clear that/gi, '');
+          cleanArticle = cleanArticle.replace(/This demonstrates/gi, '');
+          
+          // Clean up extra spaces and newlines
+          cleanArticle = cleanArticle.replace(/\n\s*\n\s*\n/g, '\n\n');
+          cleanArticle = cleanArticle.replace(/^\s+|\s+$/g, '');
+          
+          // Remove empty lines at start and end
+          cleanArticle = cleanArticle.replace(/^\s*\n+/, '');
+          cleanArticle = cleanArticle.replace(/\n+\s*$/, '');
+          
+          processedResults.push({
+            originalTitle: article.title,
+            readyToPublishArticle: cleanArticle,
+            processingTime: response.data.processingTime || 'N/A',
+            source: article.source?.name,
+            publishedAt: article.publishedAt
+          });
+        } else {
+          processedResults.push({
+            originalTitle: article.title,
+            error: response.data?.error || 'Processing failed'
+          });
+        }
+      } catch (error) {
+        processedResults.push({
+          originalTitle: article.title,
+          error: error.response?.data?.error || error.message || 'Processing failed'
+        });
+      }
+    }
+
+    setResults(processedResults);
+    setProcessing(false);
+    setProcessingArticle('');
+  };
+
+  // Toggle article selection
+  const toggleArticleSelection = (index) => {
+    setSelectedArticles(prev => 
+      prev.includes(index) 
+        ? prev.filter(i => i !== index)
+        : [...prev, index]
+    );
+  };
+
+  // Clear results
+  const clearResults = () => {
+    setResults([]);
+    setSelectedArticles([]);
+  };
+
+  return (
+    <div style={{padding: '20px', fontFamily: 'Arial, sans-serif', maxWidth: '1200px', margin: '0 auto'}}>
+      {/* Header */}
+      <div style={{textAlign: 'center', marginBottom: '30px'}}>
+        <h1 style={{color: '#2c3e50', fontSize: '2.5rem', marginBottom: '10px'}}>
+          🏏 Automated Cricket News Processor
+        </h1>
+        <p style={{color: '#666', fontSize: '1.1rem'}}>
+          Fetch, select, and process cricket news articles automatically
+        </p>
+      </div>
+
+      {/* Processing Overlay */}
+      {processing && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '40px',
+            borderRadius: '12px',
+            textAlign: 'center',
+            maxWidth: '500px',
+            margin: '20px'
+          }}>
+            <div style={{fontSize: '48px', marginBottom: '20px'}}>⏳</div>
+            <h3 style={{color: '#2c3e50', marginBottom: '15px'}}>Processing Article...</h3>
+            <p style={{color: '#666', marginBottom: '20px'}}>{processingArticle}</p>
+            <div style={{
+              width: '100%',
+              height: '6px',
+              backgroundColor: '#e9ecef',
+              borderRadius: '3px',
+              overflow: 'hidden'
+            }}>
+              <div style={{
+                width: '100%',
+                height: '100%',
+                backgroundColor: '#007bff',
+                animation: 'loading 2s ease-in-out infinite'
+              }}></div>
+            </div>
+            <p style={{color: '#999', fontSize: '12px', marginTop: '10px'}}>
+              This may take 1-2 minutes. Please wait...
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Controls */}
+      <div style={{
+        backgroundColor: '#f8f9fa',
+        padding: '25px',
+        borderRadius: '12px',
+        marginBottom: '30px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+      }}>
+        <div style={{display: 'flex', gap: '20px', marginBottom: '20px', flexWrap: 'wrap'}}>
+          <div>
+            <label style={{display: 'block', marginBottom: '8px', fontWeight: 'bold', color: '#333'}}>
+              Search Query
+            </label>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Enter search term"
+              style={{
+                padding: '12px',
+                borderRadius: '8px',
+                border: '2px solid #ddd',
+                width: '250px',
+                fontSize: '16px'
+              }}
+            />
+          </div>
+          <div>
+            <label style={{display: 'block', marginBottom: '8px', fontWeight: 'bold', color: '#333'}}>
+              Max Articles
+            </label>
+            <input
+              type="number"
+              value={maxArticles}
+              onChange={(e) => setMaxArticles(parseInt(e.target.value))}
+              min="1"
+              max="50"
+              style={{
+                padding: '12px',
+                borderRadius: '8px',
+                border: '2px solid #ddd',
+                width: '120px',
+                fontSize: '16px'
+              }}
+            />
+          </div>
+        </div>
+        
+        <div style={{display: 'flex', gap: '15px', flexWrap: 'wrap'}}>
+          <button 
+            onClick={fetchNews}
+            disabled={loading}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: loading ? '#ccc' : '#007bff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            {loading ? '⏳ Fetching...' : '�� Fetch Latest News'}
+          </button>
+          
+          <button 
+            onClick={processSelectedArticles}
+            disabled={selectedArticles.length === 0 || processing}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: (selectedArticles.length === 0 || processing) ? '#ccc' : '#28a745',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: (selectedArticles.length === 0 || processing) ? 'not-allowed' : 'pointer',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            {processing ? '⏳ Processing...' : `�� Process Selected (${selectedArticles.length})`}
+          </button>
+          
+          <button 
+            onClick={clearResults}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: '#dc3545',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            🗑️ Clear Results
+          </button>
+        </div>
+      </div>
+
+      {/* Articles Section */}
+      <div style={{marginBottom: '40px'}}>
+        <h2 style={{color: '#2c3e50', marginBottom: '25px', fontSize: '1.8rem'}}>
+          📰 Available Articles ({articles.length})
+        </h2>
+        
+        {loading ? (
+          <div style={{textAlign: 'center', padding: '60px'}}>
+            <div style={{fontSize: '48px', marginBottom: '20px'}}>⏳</div>
+            <p style={{fontSize: '18px', color: '#666'}}>Fetching latest cricket news...</p>
+          </div>
+        ) : (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
+            gap: '25px'
+          }}>
+            {articles.map((article, index) => (
+              <div 
+                key={index}
+                onClick={() => toggleArticleSelection(index)}
+                style={{
+                  border: selectedArticles.includes(index) ? '3px solid #007bff' : '2px solid #e9ecef',
+                  borderRadius: '12px',
+                  padding: '20px',
+                  backgroundColor: selectedArticles.includes(index) ? '#f0f8ff' : 'white',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+                  position: 'relative'
+                }}
+              >
+                {selectedArticles.includes(index) && (
+                  <div style={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                    backgroundColor: '#007bff',
+                    color: 'white',
+                    padding: '5px 10px',
+                    borderRadius: '20px',
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                  }}>
+                    ✓ SELECTED
+                  </div>
+                )}
+                
+                <h3 style={{
+                  fontWeight: 'bold',
+                  marginBottom: '15px',
+                  fontSize: '16px',
+                  lineHeight: '1.4',
+                  color: '#2c3e50'
+                }}>
+                  {article.title}
+                </h3>
+                
+                <div style={{fontSize: '12px', color: '#666', marginBottom: '15px'}}>
+                  <span style={{
+                    backgroundColor: '#e9ecef',
+                    padding: '4px 8px',
+                    borderRadius: '12px',
+                    marginRight: '10px'
+                  }}>
+                    {article.source?.name}
+                  </span>
+                  <span>{new Date(article.publishedAt).toLocaleDateString()}</span>
+                  <span style={{
+                    float: 'right',
+                    padding: '4px 8px',
+                    borderRadius: '12px',
+                    backgroundColor: article.validation?.isValid ? '#28a745' : '#dc3545',
+                    color: 'white',
+                    fontSize: '10px',
+                    fontWeight: 'bold'
+                  }}>
+                    {article.validation?.isValid ? '✓ Valid' : '✗ Invalid'}
+                  </span>
+                </div>
+                
+                <p style={{
+                  fontSize: '14px',
+                  lineHeight: '1.5',
+                  color: '#555',
+                  marginBottom: '20px'
+                }}>
+                  {article.summary || article.description}
+                </p>
+                
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedArticles([index]);
+                    processSelectedArticles();
+                  }}
+                  style={{
+                    padding: '10px 20px',
+                    backgroundColor: '#28a745',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  🚀 Process Now
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Results Section */}
+      <div style={{
+        backgroundColor: '#f8f9fa',
+        padding: '30px',
+        borderRadius: '12px',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+      }}>
+        <h2 style={{color: '#2c3e50', marginBottom: '25px', fontSize: '1.8rem'}}>
+          📄 Processing Results ({results.length})
+        </h2>
+        
+        {results.length === 0 ? (
+          <div style={{
+            textAlign: 'center',
+            padding: '40px',
+            backgroundColor: 'white',
+            borderRadius: '8px',
+            border: '2px dashed #ddd'
+          }}>
+            <div style={{fontSize: '48px', marginBottom: '20px'}}>��</div>
+            <p style={{fontSize: '18px', color: '#666'}}>
+              No results yet. Select articles and click "Process Selected" to see results here.
+            </p>
+          </div>
+        ) : (
+          <>
+            {/* Stats */}
+            <div style={{
+              display: 'flex',
+              gap: '30px',
+              marginBottom: '30px',
+              justifyContent: 'center'
+            }}>
+              <div style={{textAlign: 'center'}}>
+                <div style={{
+                  fontSize: '32px',
+                  fontWeight: 'bold',
+                  color: '#28a745',
+                  marginBottom: '5px'
+                }}>
+                  {results.filter(r => !r.error).length}
+                </div>
+                <div style={{fontSize: '14px', color: '#666', fontWeight: 'bold'}}>Processed</div>
+              </div>
+              <div style={{textAlign: 'center'}}>
+                <div style={{
+                  fontSize: '32px',
+                  fontWeight: 'bold',
+                  color: '#dc3545',
+                  marginBottom: '5px'
+                }}>
+                  {results.filter(r => r.error).length}
+                </div>
+                <div style={{fontSize: '14px', color: '#666', fontWeight: 'bold'}}>Failed</div>
+              </div>
+              <div style={{textAlign: 'center'}}>
+                <div style={{
+                  fontSize: '32px',
+                  fontWeight: 'bold',
+                  color: '#007bff',
+                  marginBottom: '5px'
+                }}>
+                  {results.length}
+                </div>
+                <div style={{fontSize: '14px', color: '#666', fontWeight: 'bold'}}>Total</div>
+              </div>
+            </div>
+            
+            {/* Results */}
+            <div>
+              {results.map((result, index) => (
+                <div key={index} style={{
+                  border: result.error ? '2px solid #dc3545' : '2px solid #28a745',
+                  padding: '25px',
+                  margin: '20px 0',
+                  borderRadius: '12px',
+                  backgroundColor: result.error ? '#fff5f5' : '#f8fff8',
+                  boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+                }}>
+                  <div style={{
+                    fontWeight: 'bold',
+                    marginBottom: '15px',
+                    fontSize: '18px',
+                    color: result.error ? '#dc3545' : '#28a745'
+                  }}>
+                    {result.error ? '❌' : '✅'} {result.originalTitle}
+                  </div>
+                  
+                  <div style={{
+                    maxHeight: '500px',
+                    overflow: 'auto',
+                    fontSize: '14px',
+                    lineHeight: '1.6',
+                    whiteSpace: 'pre-wrap',
+                    backgroundColor: 'white',
+                    padding: '20px',
+                    borderRadius: '8px',
+                    border: '1px solid #e9ecef'
+                  }}>
+                    {result.error ? result.error : result.readyToPublishArticle}
+                  </div>
+                  
+                  {!result.error && (
+                    <div style={{
+                      marginTop: '15px',
+                      fontSize: '12px',
+                      color: '#666',
+                      textAlign: 'right'
+                    }}>
+                      <strong>Processing time:</strong> {result.processingTime}ms
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* CSS for loading animation */}
+      <style>
+        {`
+          @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+          }
+        `}
+      </style>
+    </div>
+  );
+};
+
+export default AutomatedCricketNews;

@@ -32,6 +32,10 @@ import HindiGscContentQueryMatch from "./HindiGscContentQueryMatch.jsx";
 import "./index.css";
 import Login from "./login_tem.jsx";
 import PromptConsole from "./PromptConsole.jsx";
+// In your main.jsx file, add this route:
+import AutomatedCricketNews from './AutomatedCricketNews.jsx';
+
+// Add this route to your existing routes:
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -59,6 +63,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="journalist-rewrite" element={<SmartJournalistRewrite />} />
           <Route path="prompt-console" element={<PromptConsole />} />
           <Route path="hindi-converter" element={<TranslatePublishArticle />} />
+          <Route path="automated-cricket-news" element={<AutomatedCricketNews />} />
+
 
           {/* GSC Routes */}
           <Route path="gsc/ai-reports" element={<GscAiReports />} />
