@@ -614,7 +614,7 @@ const AutomatedCricketNews = () => {
   const [storedTotalCount, setStoredTotalCount] = useState(0);
   const [processedTotalCount, setProcessedTotalCount] = useState(0);
 
-  const DEPLOYED_BACKEND_URL = "http://localhost:5000"; // Change to your deployed URL when ready
+  const DEPLOYED_BACKEND_URL = "https://hammerhead-app-jkdit.ondigitalocean.app"; // DigitalOcean deployed URL
   const ITEMS_PER_PAGE = 25;
 
   // Fetch stored news from database with pagination
