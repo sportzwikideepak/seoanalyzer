@@ -594,8 +594,6 @@
 // };
 
 // export default AutomatedCricketNews;
-
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -604,7 +602,7 @@ const AutomatedCricketNews = () => {
   const [processedNews, setProcessedNews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState({});
-  const [activeTab, setActiveTab] = useState('stored'); // 'stored' or 'processed'
+  const [activeTab, setActiveTab] = useState('stored');
   
   // Pagination states
   const [storedCurrentPage, setStoredCurrentPage] = useState(1);
@@ -614,7 +612,7 @@ const AutomatedCricketNews = () => {
   const [storedTotalCount, setStoredTotalCount] = useState(0);
   const [processedTotalCount, setProcessedTotalCount] = useState(0);
 
-  const DEPLOYED_BACKEND_URL = "https://hammerhead-app-jkdit.ondigitalocean.app"; // DigitalOcean deployed URL
+  const DEPLOYED_BACKEND_URL = "https://hammerhead-app-jkdit.ondigitalocean.app";
   const ITEMS_PER_PAGE = 25;
 
   // Fetch stored news from database with pagination
@@ -628,7 +626,6 @@ const AutomatedCricketNews = () => {
         setStoredTotalCount(response.data.totalCount || response.data.news.length);
         setStoredTotalPages(Math.ceil((response.data.totalCount || response.data.news.length) / ITEMS_PER_PAGE));
         setStoredCurrentPage(page);
-        console.log('Fetched news:', response.data.news.length);
       }
     } catch (error) {
       console.error('Error fetching stored news:', error);
@@ -648,7 +645,6 @@ const AutomatedCricketNews = () => {
         setProcessedTotalCount(response.data.totalCount || response.data.news.length);
         setProcessedTotalPages(Math.ceil((response.data.totalCount || response.data.news.length) / ITEMS_PER_PAGE));
         setProcessedCurrentPage(page);
-        console.log('Fetched processed news:', response.data.news.length);
       }
     } catch (error) {
       console.error('Error fetching processed news:', error);
@@ -663,7 +659,6 @@ const AutomatedCricketNews = () => {
       const response = await axios.post(`${DEPLOYED_BACKEND_URL}/api/process-article/${articleId}`);
       
       if (response.data.success) {
-        // Refresh both lists
         await fetchStoredNews(storedCurrentPage);
         await fetchProcessedNews(processedCurrentPage);
         alert('Article processed successfully!');
@@ -683,7 +678,7 @@ const AutomatedCricketNews = () => {
     try {
       const response = await axios.post(`${DEPLOYED_BACKEND_URL}/api/manual-fetch-news`);
       if (response.data.success) {
-        await fetchStoredNews(1); // Go to first page after fetching new news
+        await fetchStoredNews(1);
         setStoredCurrentPage(1);
         alert('News fetched and stored successfully!');
       }
@@ -702,7 +697,7 @@ const AutomatedCricketNews = () => {
     const interval = setInterval(() => {
       fetchStoredNews(storedCurrentPage);
       fetchProcessedNews(processedCurrentPage);
-    }, 5 * 60 * 1000); // 5 minutes
+    }, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -718,6 +713,74 @@ const AutomatedCricketNews = () => {
         hour12: true 
       })
     };
+  };
+
+  // Generate meta title from article title - FULL TITLE
+  const generateMetaTitle = (title) => {
+    return title; // Show full title without truncation
+  };
+
+  // Convert plain text to HTML format with proper tags
+  const convertToHTML = (text) => {
+    if (!text) return '';
+    
+    // Clean the text first
+    let cleanText = text
+      .replace(/Of course\. Here is a complete, ready-to-publish cricket article crafted from your content\./gi, '')
+      .replace(/optimized for engagement and search engines\./gi, '')
+      .replace(/Stay updated with the latest cricket news and analysis from the Asia Cup\./gi, '')
+      .replace(/\*\*(.*?)\*\*/g, '$1')
+      .replace(/\*(.*?)\*/g, '$1')
+      .replace(/#{1,6}\s*/g, '')
+      .replace(/\*\s*/g, '')
+      .replace(/\n\*\*\*/g, '\n\n')
+      .replace(/\*\*\*/g, '')
+      .replace(/Here is a complete, ready-to-publish cricket article/gi, '')
+      .replace(/crafted from your content/gi, '')
+      .replace(/designed to be professional, engaging/gi, '')
+      .replace(/optimized for both readers and search engines/gi, '')
+      .replace(/Format it with proper headings, subheadings, and structure/gi, '')
+      .replace(/Make it sound human and natural, not AI-generated/gi, '')
+      .replace(/The incident highlights/gi, '')
+      .replace(/This development comes/gi, '')
+      .replace(/The controversy began/gi, '')
+      .replace(/In response to/gi, '')
+      .replace(/The decision marks/gi, '')
+      .replace(/This move comes/gi, '')
+      .replace(/The announcement follows/gi, '')
+      .replace(/In conclusion/gi, '')
+      .replace(/To summarize/gi, '')
+      .replace(/Overall/gi, '')
+      .replace(/In summary/gi, '')
+      .replace(/It is clear that/gi, '')
+      .replace(/This demonstrates/gi, '')
+      .replace(/\n\s*\n\s*\n/g, '\n\n')
+      .replace(/^\s+|\s+$/g, '')
+      .replace(/^\s*\n+/, '')
+      .replace(/\n+\s*$/, '');
+    
+    // Split into paragraphs
+    const paragraphs = cleanText.split('\n\n').filter(p => p.trim());
+    
+    let html = '';
+    
+    // First paragraph as h1 (main title)
+    if (paragraphs.length > 0) {
+      const firstPara = paragraphs[0].trim();
+      html += `<h1>${firstPara}</h1>`;
+      
+      // Rest as paragraphs
+      for (let i = 1; i < paragraphs.length; i++) {
+        const para = paragraphs[i].trim();
+        if (para) {
+          html += `<p>${para}</p>`;
+        }
+      }
+    } else {
+      html = `<p>${cleanText}</p>`;
+    }
+    
+    return html;
   };
 
   // Pagination component
@@ -871,7 +934,7 @@ const AutomatedCricketNews = () => {
             fontWeight: 'bold'
           }}
         >
-          �� Stored News ({storedTotalCount})
+          Stored News ({storedTotalCount})
         </button>
         <button
           onClick={() => setActiveTab('processed')}
@@ -934,7 +997,7 @@ const AutomatedCricketNews = () => {
       {activeTab === 'stored' ? (
         <div>
           <h2 style={{color: '#2c3e50', marginBottom: '20px'}}>
-            �� Latest Stored News (Page {storedCurrentPage} of {storedTotalPages})
+            Latest Stored News (Page {storedCurrentPage} of {storedTotalPages})
           </h2>
           
           {loading ? (
@@ -944,7 +1007,7 @@ const AutomatedCricketNews = () => {
             </div>
           ) : storedNews.length === 0 ? (
             <div style={{textAlign: 'center', padding: '40px'}}>
-              <div style={{fontSize: '48px', marginBottom: '20px'}}></div>
+              <div style={{fontSize: '48px', marginBottom: '20px'}}>📰</div>
               <p style={{fontSize: '18px', color: '#666'}}>No news found. Click "Fetch New News" to get latest cricket news.</p>
             </div>
           ) : (
@@ -981,8 +1044,8 @@ const AutomatedCricketNews = () => {
                           color: '#666'
                         }}>
                           <span>📅 {date}</span>
-                          <span> {time}</span>
-                          <span>�� {article.source_name}</span>
+                          <span>🕒 {time}</span>
+                          <span> {article.source_name}</span>
                           <span>📝 {article.word_count} words</span>
                           {article.processed && (
                             <span style={{color: '#28a745', fontWeight: 'bold'}}>✅ Processed</span>
@@ -1032,6 +1095,8 @@ const AutomatedCricketNews = () => {
           <div style={{display: 'flex', flexDirection: 'column', gap: '15px'}}>
             {processedNews.map((article) => {
               const { date, time } = formatDateTime(article.processed_at);
+              const metaTitle = generateMetaTitle(article.title);
+              
               return (
                 <div key={article.id} style={{
                   border: '2px solid #28a745',
@@ -1064,18 +1129,33 @@ const AutomatedCricketNews = () => {
                     </div>
                   </div>
                   
+                  {/* Meta Information - ONLY TITLE */}
                   <div style={{
-                    maxHeight: '300px',
-                    overflow: 'auto',
-                    fontSize: '14px',
-                    lineHeight: '1.6',
-                    whiteSpace: 'pre-wrap',
-                    backgroundColor: 'white',
+                    backgroundColor: '#e9ecef',
                     padding: '15px',
                     borderRadius: '8px',
-                    border: '1px solid #e9ecef'
+                    marginBottom: '15px',
+                    fontSize: '12px'
                   }}>
-                    {article.ready_article}
+                    <div>
+                      <strong>Meta Title:</strong> {metaTitle}
+                    </div>
+                  </div>
+                  
+                  {/* HTML Tags as Text - NOT RENDERED */}
+                  <div style={{
+                    maxHeight: '600px',
+                    overflow: 'auto',
+                    fontSize: '12px',
+                    lineHeight: '1.4',
+                    backgroundColor: '#f8f9fa',
+                    padding: '20px',
+                    borderRadius: '8px',
+                    border: '1px solid #e9ecef',
+                    fontFamily: 'monospace',
+                    whiteSpace: 'pre-wrap'
+                  }}>
+                    {convertToHTML(article.ready_article)}
                   </div>
                 </div>
               );
