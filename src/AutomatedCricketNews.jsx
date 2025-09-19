@@ -582,7 +582,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const API = "http://localhost:5000";  // change if you deploy
+// const API = "http://localhost:5000";  // change if you deploy
+  const DEPLOYED_BACKEND_URL = "https://hammerhead-app-jkdit.ondigitalocean.app";
+
 const PAGE = 25;
 
 export default function AutomatedCricketNews() {
