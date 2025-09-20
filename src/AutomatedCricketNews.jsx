@@ -579,11 +579,12 @@
 //   );
 // };
 
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 // const API = "http://localhost:5000";  // change if you deploy
-  const API = "https://hammerhead-app-jkdit.ondigitalocean.app";
+const API = "https://hammerhead-app-jkdit.ondigitalocean.app";
 
 const PAGE = 25;
 
@@ -601,7 +602,20 @@ export default function AutomatedCricketNews() {
   const [stc, setStc] = useState(0);
   const [ptc, setPtc] = useState(0);
 
-  // fetchers
+  // ---- helpers ----
+  const fmt = (d) => {
+    if (!d) return { date: "-", time: "-" };
+    const t = new Date(d); // ISO 'Z' from backend -> renders in local time here
+    return {
+      date: t.toLocaleDateString("en-IN"),
+      time: t.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true }),
+    };
+  };
+
+  const safePublishedAt = (row) => row.published_at_iso || row.published_at;
+  const safeProcessedAt = (row) => row.processed_at_iso || row.processed_at;
+
+  // ---- fetchers ----
   const fetchStored = async (page = 1) => {
     setLoading(true);
     try {
@@ -671,14 +685,6 @@ export default function AutomatedCricketNews() {
     }
   };
 
-  const fmt = (d) => {
-    const t = new Date(d);
-    return {
-      date: t.toLocaleDateString("en-IN"),
-      time: t.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true }),
-    };
-  };
-
   return (
     <div style={{ padding: 20, maxWidth: 1200, margin: "0 auto", fontFamily: "Inter, Arial" }}>
       <div style={{ textAlign: "center", marginBottom: 24 }}>
@@ -687,12 +693,16 @@ export default function AutomatedCricketNews() {
       </div>
 
       <div style={{ display: "flex", gap: 10, marginBottom: 16, borderBottom: "2px solid #eee" }}>
-        <button onClick={() => setTab("stored")}
-                style={{ padding: "10px 16px", background: tab==="stored"?"#007bff":"#f3f4f6", color: tab==="stored"?"#fff":"#333" }}>
+        <button
+          onClick={() => setTab("stored")}
+          style={{ padding: "10px 16px", background: tab === "stored" ? "#007bff" : "#f3f4f6", color: tab === "stored" ? "#fff" : "#333" }}
+        >
           Stored News ({stc})
         </button>
-        <button onClick={() => setTab("processed")}
-                style={{ padding: "10px 16px", background: tab==="processed"?"#28a745":"#f3f4f6", color: tab==="processed"?"#fff":"#333" }}>
+        <button
+          onClick={() => setTab("processed")}
+          style={{ padding: "10px 16px", background: tab === "processed" ? "#28a745" : "#f3f4f6", color: tab === "processed" ? "#fff" : "#333" }}
+        >
           ✅ Processed Articles ({ptc})
         </button>
       </div>
@@ -711,7 +721,7 @@ export default function AutomatedCricketNews() {
           <h2>Latest Stored News (Page {sp} of {stp})</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {stored.map((a) => {
-              const { date, time } = fmt(a.published_at);
+              const { date, time } = fmt(safePublishedAt(a));
               const isBusy = !!busy[a.id];
               return (
                 <div key={a.id} style={{ border: "1px solid #e5e7eb", borderRadius: 10, padding: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -743,7 +753,7 @@ export default function AutomatedCricketNews() {
           <h2>✅ Processed Articles (Page {pp} of {ptp})</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {processed.map((a) => {
-              const { date, time } = fmt(a.processed_at);
+              const { date, time } = fmt(safeProcessedAt(a));
               const title = a.final_title || a.title;
               const meta  = a.final_meta || "";
               const slug  = a.final_slug || "article";
@@ -812,4 +822,3 @@ function Pager({ page, total, totalCount, onChange }) {
     </div>
   );
 }
-
