@@ -37,6 +37,8 @@ import AutomatedCricketNews from './AutomatedCricketNews.jsx';
 import HindiCricketNews from "./HindiCricketNews.jsx";
 // Add this import
 import ViralContentGenerator from './ViralContentGenerator.jsx';
+import AutomatedAllNews from './AutomatedAllNews.jsx';
+
 
 // Add this route in your existing routes
 
@@ -69,7 +71,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="prompt-console" element={<PromptConsole />} />
           <Route path="hindi-converter" element={<TranslatePublishArticle />} />
           <Route path="automated-cricket-news" element={<AutomatedCricketNews />} />
+
           <Route path="viral-content-generator" element={<ViralContentGenerator />} />
+          <Route path="automated-all-news" element={<AutomatedAllNews />} />
+
 
  
          <Route path="hindi-cricket-news" element={<HindiCricketNews />} />
