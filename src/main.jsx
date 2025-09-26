@@ -38,6 +38,8 @@ import HindiCricketNews from "./HindiCricketNews.jsx";
 // Add this import
 import ViralContentGenerator from './ViralContentGenerator.jsx';
 import AutomatedAllNews from './AutomatedAllNews.jsx';
+import AllNewsViralContentGenerator from './AllNewsViralContentGenerator.jsx';
+
 
 
 // Add this route in your existing routes
@@ -78,6 +80,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
  
          <Route path="hindi-cricket-news" element={<HindiCricketNews />} />
+         <Route path="all-news-viral-generator" element={<AllNewsViralContentGenerator />} />
 
 
           {/* GSC Routes */}

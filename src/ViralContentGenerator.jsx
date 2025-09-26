@@ -796,8 +796,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-// const API = "http://localhost:5000";
-
+// V
 const API = "https://hammerhead-app-jkdit.ondigitalocean.app";
 
 const PAGE = 25;
