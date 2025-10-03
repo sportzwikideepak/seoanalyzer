@@ -32,6 +32,7 @@ import HindiGscContentRefresh from "./HindiGscContentRefresh.jsx";
 import HindiGscLowCtr from "./HindiGscLowCtr.jsx";
 import HindiGscRankingWatchdog from "./HindiGscRankingWatchdog.jsx";
 import HindiGscContentQueryMatch from "./HindiGscContentQueryMatch.jsx";
+import PakistanCricketNews from './PakistanCricketNews.jsx';
 
 import "./index.css";
 import Login from "./login_tem.jsx";
@@ -100,6 +101,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="hindi-low-ctr" element={<HindiGscLowCtr />} />
           <Route path="hindi-ranking-watchdog" element={<HindiGscRankingWatchdog />} />
           <Route path="hindi-content-query-match" element={<HindiGscContentQueryMatch />} />
+          <Route path="pakistan-cricket-news" element={<PakistanCricketNews />} />
         </Route>
       </Routes>
     </BrowserRouter>
