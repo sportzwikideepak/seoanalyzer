@@ -3,7 +3,6 @@ import axios from "axios";
 import "./FunnyCommentary.css";
 
 const API_BASE = "https://hammerhead-app-jkdit.ondigitalocean.app/api";
-// const API_BASE = "http://localhost:5000/api";
 
 function FunnyCommentaryCompareBox({ matchId = "12345", inningNumber = 1 }) {
   const [openaiData, setOpenaiData] = useState([]);

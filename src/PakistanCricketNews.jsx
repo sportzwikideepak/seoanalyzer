@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -7,14 +5,12 @@ const API = "https://hammerhead-app-jkdit.ondigitalocean.app";
 
 const PAGE = 25;
 
-export default function AutomatedCricketNews() {
+export default function PakistanCricketNews() {
   const [stored, setStored] = useState([]);
   const [processed, setProcessed] = useState([]);
   const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState("stored");
   const [busy, setBusy] = useState({});
-  const [selectedArticle, setSelectedArticle] = useState(null);
-  const [showModal, setShowModal] = useState(false);
 
   const [sp, setSp] = useState(1);
   const [pp, setPp] = useState(1);
@@ -57,7 +53,7 @@ export default function AutomatedCricketNews() {
     try {
       const offset = (page - 1) * PAGE;
       const r = await axios.get(
-        `${API}/api/stored-news?limit=${PAGE}&offset=${offset}&_=${Date.now()}`,
+        `${API}/api/pakistan-stored-news?limit=${PAGE}&offset=${offset}&_=${Date.now()}`,
         { headers: { "Cache-Control": "no-cache" } }
       );
       if (r.data?.success) {
@@ -66,7 +62,7 @@ export default function AutomatedCricketNews() {
         setStc(total);
         setStp(Math.max(1, Math.ceil(total / PAGE)));
         setSp(page);
-        console.log("📰 Fetched stored news:", r.data.news?.length, "articles");
+        console.log("📰 Fetched Pakistan stored news:", r.data.news?.length, "articles");
       }
     } catch (e) {
       alert(e.response?.data?.error || e.message);
@@ -79,7 +75,7 @@ export default function AutomatedCricketNews() {
     try {
       const offset = (page - 1) * PAGE;
       const r = await axios.get(
-        `${API}/api/processed-news?limit=${PAGE}&offset=${offset}&_=${Date.now()}`,
+        `${API}/api/pakistan-processed-news?limit=${PAGE}&offset=${offset}&_=${Date.now()}`,
         { headers: { "Cache-Control": "no-cache" } }
       );
       if (r.data?.success) {
@@ -88,7 +84,7 @@ export default function AutomatedCricketNews() {
         setPtc(total);
         setPtp(Math.max(1, Math.ceil(total / PAGE)));
         setPp(page);
-        console.log("✅ Fetched processed news:", r.data.news?.length, "articles");
+        console.log("✅ Fetched Pakistan processed news:", r.data.news?.length, "articles");
       }
     } catch (e) {
       console.error(e);
@@ -96,7 +92,7 @@ export default function AutomatedCricketNews() {
   };
 
   useEffect(() => {
-    console.log(" Component mounted");
+    console.log(" Pakistan Cricket News Component mounted");
     console.log(" Current system time:", new Date().toLocaleString("en-IN"));
     fetchStored(1);
     fetchProcessed(1);
@@ -105,11 +101,11 @@ export default function AutomatedCricketNews() {
   const gen = async (id) => {
     setBusy((m) => ({ ...m, [id]: true }));
     try {
-      const r = await axios.post(`${API}/api/articles/${id}/generate`);
+      const r = await axios.post(`${API}/api/pakistan-articles/${id}/generate`);
       if (!r.data?.success) throw new Error(r.data?.error || "Failed");
       await fetchStored(sp);
       await fetchProcessed(pp);
-      alert("✅ Article generated.");
+      alert("✅ Pakistan Article generated.");
     } catch (e) {
       alert(e.response?.data?.error || e.message);
     } finally {
@@ -120,10 +116,10 @@ export default function AutomatedCricketNews() {
   const manualFetch = async () => {
     setLoading(true);
     try {
-      await axios.post(`${API}/api/manual-fetch-news`);
+      await axios.post(`${API}/api/pakistan-manual-fetch-news`);
       await fetchStored(1);
       setSp(1);
-      alert("News fetched.");
+      alert("Pakistan News fetched.");
     } catch (e) {
       alert(e.response?.data?.error || e.message);
     } finally {
@@ -134,8 +130,8 @@ export default function AutomatedCricketNews() {
   return (
     <div style={{ padding: 20, maxWidth: 1200, margin: "0 auto", fontFamily: "Inter, Arial" }}>
       <div style={{ textAlign: "center", marginBottom: 24 }}>
-        <h1> Continuous Cricket News</h1>
-        <p>24/7 News Fetching & One-Click Article Generation</p>
+        <h1>🇵🇰 Pakistan Cricket News</h1>
+        <p>24/7 Pakistan Cricket News Fetching & One-Click Article Generation</p>
         <div style={{ fontSize: '12px', color: '#999', marginTop: '10px' }}>
           Current Time: {new Date().toLocaleString("en-IN")} | API: {API}
         </div>
@@ -146,7 +142,7 @@ export default function AutomatedCricketNews() {
           onClick={() => setTab("stored")}
           style={{ padding: "10px 16px", background: tab === "stored" ? "#007bff" : "#f3f4f6", color: tab === "stored" ? "#fff" : "#333" }}
         >
-          Stored News ({stc})
+          🇵🇰 Stored News ({stc})
         </button>
         <button
           onClick={() => setTab("processed")}
@@ -161,13 +157,13 @@ export default function AutomatedCricketNews() {
           {loading ? "⏳ Refreshing…" : "🔄 Refresh All"}
         </button>
         <button disabled={loading} onClick={manualFetch}>
-          {loading ? "⏳ Fetching…" : "📰 Fetch New News"}
+          {loading ? "⏳ Fetching…" : "🇵🇰 Fetch Pakistan News"}
         </button>
       </div>
 
       {tab === "stored" ? (
         <div>
-          <h2>Latest Stored News (Page {sp} of {stp})</h2>
+          <h2>Latest Pakistan Stored News (Page {sp} of {stp})</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {stored.map((a) => {
               const { date, time } = fmt(getPub(a));
@@ -196,7 +192,7 @@ export default function AutomatedCricketNews() {
                     <div style={{ display: "flex", gap: 14, color: "#666", fontSize: 12 }}>
                       <span>📅 {date}</span>
                       <span>🕒 {time}</span>
-                      <span>{a.source_name}</span>
+                      <span>🇵🇰 {a.source_name}</span>
                       {typeof a.word_count === "number" && <span>📝 {a.word_count} words</span>}
                       {a.processed ? <span style={{ color: "#28a745", fontWeight: 700 }}>✅ Processed</span> : null}
                     </div>
@@ -216,7 +212,7 @@ export default function AutomatedCricketNews() {
         </div>
       ) : (
         <div>
-          <h2>✅ Processed Articles (Page {pp} of {ptp})</h2>
+          <h2>✅ Processed Pakistan Articles (Page {pp} of {ptp})</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {processed.map((a) => {
               const { date, time } = fmt(getProc(a));
@@ -230,7 +226,7 @@ export default function AutomatedCricketNews() {
                     <div style={{ fontWeight: 700 }}>{title}</div>
                     <div style={{ fontSize: 12, color: "#666" }}>
                       <div>Processed: {date} {time}</div>
-                      <div>📰 {a.source_name}</div>
+                      <div>🇵🇰 {a.source_name}</div>
                     </div>
                   </div>
 
