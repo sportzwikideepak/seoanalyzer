@@ -49,6 +49,8 @@ import AutomatedHindiAllNews from './AutomatedHindiAllNews.jsx';
 // Add OpenAI All News import
 import AutomatedOpenAIAllNews from './AutomatedOpenAIAllNews.jsx';
 import CricketNewsOpenAI from './CricketNewsOpenAI.jsx';
+import HindiCricketNewsOpenAI from './HindiCricketNewsOpenAI.jsx';
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -104,6 +106,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="hindi-content-query-match" element={<HindiGscContentQueryMatch />} />
           <Route path="pakistan-cricket-news" element={<PakistanCricketNews />} />
           <Route path="cricket-news-openai" element={<CricketNewsOpenAI />} />
+          <Route path="hindi-cricket-news-openai" element={<HindiCricketNewsOpenAI />} />
         </Route>
       </Routes>
     </BrowserRouter>
