@@ -48,6 +48,7 @@ import AllNewsViralContentGenerator from './AllNewsViralContentGenerator.jsx';
 import AutomatedHindiAllNews from './AutomatedHindiAllNews.jsx';
 // Add OpenAI All News import
 import AutomatedOpenAIAllNews from './AutomatedOpenAIAllNews.jsx';
+import CricketNewsOpenAI from './CricketNewsOpenAI.jsx';
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -102,6 +103,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="hindi-ranking-watchdog" element={<HindiGscRankingWatchdog />} />
           <Route path="hindi-content-query-match" element={<HindiGscContentQueryMatch />} />
           <Route path="pakistan-cricket-news" element={<PakistanCricketNews />} />
+          <Route path="cricket-news-openai" element={<CricketNewsOpenAI />} />
         </Route>
       </Routes>
     </BrowserRouter>
