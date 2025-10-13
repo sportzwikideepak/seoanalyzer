@@ -84,25 +84,25 @@ export default function HindiCricketNewsOfEnglishWithOpenAI() {
   };
 
   useEffect(() => {
-    console.log("🏏 Hindi Cricket News (English→Hindi with OpenAI) Component mounted");
+    console.log("🏏 Hindi Cricket News (English→Hindi with OpenAI GPT-5) Component mounted");
     console.log("🕒 Current system time:", new Date().toLocaleString("en-IN"));
     fetchStored(1);
     fetchProcessed(1);
   }, []);
 
-  // Generate Hindi article from English cricket news using OpenAI
+  // Generate Hindi article from English cricket news using OpenAI GPT-5
   const gen = async (id) => {
     setBusy((m) => ({ ...m, [id]: true }));
     try {
-      console.log(`🎨 Converting English article ${id} to Hindi with OpenAI...`);
+      console.log(`🎨 Converting English article ${id} to Hindi with OpenAI GPT-5...`);
       const r = await axios.post(`${API}/api/hindi-cricket-news/articles/${id}/generate`);
       if (!r.data?.success) throw new Error(r.data?.error || "Failed");
       
-      console.log("✅ Hindi article generated:", r.data);
+      console.log("✅ Hindi article generated with GPT-5:", r.data);
       await fetchStored(sp);
       await fetchProcessed(pp);
       
-      alert(`✅ Hindi article generated successfully!\n\n📊 Style: ${r.data.metadata?.style}\n🤖 Model: ${r.data.metadata?.model}\n⏱️ Time: ${(r.data.metadata?.processingTime / 1000).toFixed(2)}s`);
+      alert(`✅ Hindi article generated successfully with GPT-5!\n\n📊 Style: ${r.data.metadata?.style}\n🤖 Model: ${r.data.metadata?.model}\n⏱️ Time: ${(r.data.metadata?.processingTime / 1000).toFixed(2)}s`);
     } catch (e) {
       console.error("❌ Hindi generation error:", e);
       alert(e.response?.data?.error || e.message);
@@ -135,10 +135,10 @@ export default function HindiCricketNewsOfEnglishWithOpenAI() {
       <div style={styles.header}>
         <h1 style={styles.mainTitle}>🏏 Hindi Cricket News Generator</h1>
         <p style={styles.subtitle}>
-          English Cricket News → Hindi Articles • OpenAI GPT-4o-mini Powered
+          English Cricket News → Hindi Articles • OpenAI GPT-5 Powered
         </p>
         <div style={styles.systemInfo}>
-          🕒 {new Date().toLocaleString("en-IN")} | 🌐 API: {API} | 📊 Using cricket_news table
+          🕒 {new Date().toLocaleString("en-IN")} | 🌐 API: {API} | 📊 Using cricket_news table | 🤖 GPT-5
         </div>
       </div>
 
@@ -213,7 +213,7 @@ export default function HindiCricketNewsOfEnglishWithOpenAI() {
 function StoredNewsTab({ stored, sp, stp, stc, busy, gen, fmt, getPub, fetchStored }) {
   return (
     <div>
-      <h2 style={styles.sectionTitle}>📰 English Cricket News → Convert to Hindi (Page {sp} of {stp})</h2>
+      <h2 style={styles.sectionTitle}>📰 English Cricket News → Convert to Hindi with GPT-5 (Page {sp} of {stp})</h2>
       <div style={styles.cardContainer}>
         {stored.map((a) => {
           const { date, time } = fmt(getPub(a));
@@ -249,7 +249,7 @@ function StoredNewsTab({ stored, sp, stp, stc, busy, gen, fmt, getPub, fetchStor
                   ...(isBusy ? styles.buttonDisabled : {})
                 }}
               >
-                {isBusy ? "⏳ Converting…" : "🎨 Convert to Hindi"}
+                {isBusy ? "⏳ Converting with GPT-5…" : "🎨 Convert to Hindi (GPT-5)"}
               </button>
             </div>
           );
@@ -264,7 +264,7 @@ function StoredNewsTab({ stored, sp, stp, stc, busy, gen, fmt, getPub, fetchStor
 function ProcessedNewsTab({ processed, pp, ptp, ptc, fmt, getProc, copyToClipboard, downloadHTML, fetchProcessed }) {
   return (
     <div>
-      <h2 style={styles.sectionTitle}>✅ Hindi Cricket Articles (Page {pp} of {ptp})</h2>
+      <h2 style={styles.sectionTitle}>✅ Hindi Cricket Articles (Generated with GPT-5) (Page {pp} of {ptp})</h2>
       <div style={styles.cardContainer}>
         {processed.map((a) => {
           const { date, time } = fmt(getProc(a));
@@ -277,7 +277,7 @@ function ProcessedNewsTab({ processed, pp, ptp, ptc, fmt, getProc, copyToClipboa
               <div style={styles.processedHeader}>
                 <div style={styles.processedTitle}>{title}</div>
                 <div style={styles.processedMeta}>
-                  <div>✅ Hindi Processed: {date} {time}</div>
+                  <div>✅ Hindi Processed with GPT-5: {date} {time}</div>
                   <div>📰 {a.source_name}</div>
                 </div>
               </div>
@@ -286,6 +286,9 @@ function ProcessedNewsTab({ processed, pp, ptp, ptc, fmt, getProc, copyToClipboa
                 <div><strong>Hindi Title:</strong> {title}</div>
                 {meta && <div><strong>Hindi Meta Description:</strong> {meta}</div>}
                 {slug && <div><strong>Slug:</strong> {slug}</div>}
+                <div style={{ marginTop: '8px', padding: '8px', background: '#e8f5e8', borderRadius: '4px', fontSize: '0.85rem' }}>
+                  <strong>🤖 Generated with:</strong> OpenAI GPT-5
+                </div>
               </div>
 
               <div style={styles.buttonGroup}>
@@ -500,7 +503,7 @@ const styles = {
   buttonGenerate: {
     background: '#ff6b6b',
     color: '#fff',
-    minWidth: '180px'
+    minWidth: '200px'
   },
   buttonDisabled: {
     background: '#95a5a6',
