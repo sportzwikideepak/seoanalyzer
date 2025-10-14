@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-// const API = "https://hammerhead-app-jkdit.ondigitalocean.app";
-const API = "http://localhost:5000";
+const API = "https://hammerhead-app-jkdit.ondigitalocean.app";
+// const API = "http://localhost:5000";
 
 
 const PAGE = 25;
