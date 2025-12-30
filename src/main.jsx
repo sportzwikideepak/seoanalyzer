@@ -52,6 +52,7 @@ import CricketNewsOpenAI from './CricketNewsOpenAI.jsx';
 import HindiCricketNewsOpenAI from './HindiCricketNewsOpenAI.jsx';
 // Add this import with other imports
 import HindiCricketNewsOfEnglishWithOpenAI from './HindiCricketNewsOfEnglishWithOpenAI.jsx';
+import AutomobileNewsOpenAI from './AutomobileNewsOpenAI.jsx';
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -110,6 +111,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="cricket-news-openai" element={<CricketNewsOpenAI />} />
           <Route path="hindi-cricket-news-openai" element={<HindiCricketNewsOpenAI />} />
           <Route path="hindi-cricket-news-english-openai" element={<HindiCricketNewsOfEnglishWithOpenAI />} />
+          <Route path="automobile-news-openai" element={<AutomobileNewsOpenAI />} />
         </Route>
       </Routes>
     </BrowserRouter>
