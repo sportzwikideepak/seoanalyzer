@@ -363,6 +363,7 @@ export default function App() {
     { label: "Hindi Content Query Match", path: "/hindi-content-query-match" },
     { label: "🚗 Automobile News OpenAI", path: "/automobile-news-openai" },
     { label: "🚙 Car News OpenAI", path: "/car-news-openai" },
+    { label: "🏷️ Brand Car News OpenAI", path: "/brand-car-news-openai" },
   ];
 
   return (
