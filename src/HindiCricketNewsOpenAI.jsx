@@ -1,3 +1,5 @@
+// 
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -217,6 +219,22 @@ export default function HindiCricketNewsOpenAI() {
     }
   };
 
+  const convertToEnglish = async (id) => {
+    const convertKey = `convert-${id}`;
+    setBusy((m) => ({ ...m, [convertKey]: true }));
+    try {
+      const r = await axios.post(`${API}/api/hindi-cricket-openai/articles/${id}/convert-to-english`);
+      if (!r.data?.success) throw new Error(r.data?.error || "Failed");
+
+      await fetchProcessedOpenAI(ppo);
+      alert("✅ Hindi article converted to English successfully!");
+    } catch (e) {
+      alert(e.response?.data?.error || e.message);
+    } finally {
+      setBusy((m) => ({ ...m, [convertKey]: false }));
+    }
+  };
+
   const manualFetch = async () => {
     setLoading(true);
     try {
@@ -335,6 +353,12 @@ export default function HindiCricketNewsOpenAI() {
           total={ptpo}
           totalCount={ptco}
           onChange={fetchProcessedOpenAI}
+          busy={busy}
+          onConvertToEnglish={convertToEnglish}
+          englishTitleField="english_final_title"
+          englishMetaField="english_final_meta"
+          englishSlugField="english_final_slug"
+          englishHtmlField="english_ready_article"
         />
       ) : tab === "processed-deepseek" ? (
         <ProcessedView
@@ -349,6 +373,8 @@ export default function HindiCricketNewsOpenAI() {
           total={ptpd}
           totalCount={ptcd}
           onChange={fetchProcessedDeepSeek}
+          busy={busy}
+          onConvertToEnglish={null}
         />
       ) : (
         <CompareView
@@ -489,7 +515,25 @@ function StoredView({
   );
 }
 
-function ProcessedView({ items, fmt, getProc, titleField, metaField, slugField, htmlField, page, total, totalCount, onChange }) {
+function ProcessedView({ 
+  items, 
+  fmt, 
+  getProc, 
+  titleField, 
+  metaField, 
+  slugField, 
+  htmlField, 
+  page, 
+  total, 
+  totalCount, 
+  onChange,
+  busy,
+  onConvertToEnglish,
+  englishTitleField,
+  englishMetaField,
+  englishSlugField,
+  englishHtmlField
+}) {
   return (
     <div>
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -500,6 +544,14 @@ function ProcessedView({ items, fmt, getProc, titleField, metaField, slugField, 
           const slug = a[slugField] || "article";
           const html = a[htmlField] || "";
 
+          // English version fields (if available)
+          const englishTitle = englishTitleField ? (a[englishTitleField] || "") : "";
+          const englishMeta = englishMetaField ? (a[englishMetaField] || "") : "";
+          const englishSlug = englishSlugField ? (a[englishSlugField] || "") : "";
+          const englishHtml = englishHtmlField ? (a[englishHtmlField] || "") : "";
+          const hasEnglish = !!englishHtml;
+          const isConverting = onConvertToEnglish ? !!busy[`convert-${a.id}`] : false;
+
           return (
             <div key={a.id} style={{ border: "1px solid #d1c4e9", borderRadius: 10, padding: 16, background: "#f3e5f5" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
@@ -507,6 +559,7 @@ function ProcessedView({ items, fmt, getProc, titleField, metaField, slugField, 
                 <div style={{ fontSize: 12, color: "#666" }}>
                   <div>Processed: {date} {time}</div>
                   <div>📰 {a.source_name}</div>
+                  {hasEnglish && <div style={{ color: "#28a745", fontWeight: 700, marginTop: 4 }}>✅ English Available</div>}
                 </div>
               </div>
 
@@ -516,7 +569,7 @@ function ProcessedView({ items, fmt, getProc, titleField, metaField, slugField, 
                 {slug && <div><strong>स्लग:</strong> {slug}</div>}
               </div>
 
-              <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+              <div style={{ display: "flex", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
                 <button onClick={() => navigator.clipboard.writeText(html)}>📋 पूरा HTML कॉपी करें</button>
                 <button
                   onClick={() => {
@@ -531,9 +584,64 @@ function ProcessedView({ items, fmt, getProc, titleField, metaField, slugField, 
                 >
                   💾 HTML डाउनलोड करें
                 </button>
+                {onConvertToEnglish && (
+                  <button
+                    onClick={() => onConvertToEnglish(a.id)}
+                    disabled={isConverting || hasEnglish}
+                    style={{
+                      background: isConverting ? "#95a5a6" : hasEnglish ? "#28a745" : "#ff6b35",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: 8,
+                      padding: "8px 12px",
+                      cursor: isConverting || hasEnglish ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    {isConverting ? "⏳ Converting..." : hasEnglish ? "✅ English Ready" : "🌐 Convert to English"}
+                  </button>
+                )}
               </div>
 
+              {/* English Version Section */}
+              {hasEnglish && (
+                <div style={{ border: "2px solid #28a745", borderRadius: 8, padding: 12, marginBottom: 10, background: "#f0fff4" }}>
+                  <div style={{ fontWeight: 700, color: "#28a745", marginBottom: 8, fontSize: 16 }}>🌐 English Version</div>
+                  <div style={{ background: "#e8f5e9", padding: 8, borderRadius: 6, marginBottom: 8, fontSize: 13 }}>
+                    <div><strong>Title:</strong> {englishTitle}</div>
+                    {englishMeta && <div><strong>Meta:</strong> {englishMeta}</div>}
+                    {englishSlug && <div><strong>Slug:</strong> {englishSlug}</div>}
+                  </div>
+                  <div style={{ display: "flex", gap: 6, marginBottom: 8, flexWrap: "wrap" }}>
+                    <button
+                      onClick={() => navigator.clipboard.writeText(englishHtml)}
+                      style={{ cursor: "pointer", padding: "6px 10px", fontSize: 12, background: "#28a745", color: "#fff", border: "none", borderRadius: 4 }}
+                    >
+                      📋 Copy English HTML
+                    </button>
+                    <button
+                      onClick={() => {
+                        const blob = new Blob([englishHtml], { type: "text/html" });
+                        const url = URL.createObjectURL(blob);
+                        const aTag = document.createElement("a");
+                        aTag.href = url;
+                        aTag.download = `${englishSlug || slug}-english.html`;
+                        aTag.click();
+                        URL.revokeObjectURL(url);
+                      }}
+                      style={{ cursor: "pointer", padding: "6px 10px", fontSize: 12, background: "#28a745", color: "#fff", border: "none", borderRadius: 4 }}
+                    >
+                      💾 Download English HTML
+                    </button>
+                  </div>
+                  <div style={{ border: "1px solid #28a745", borderRadius: 6, overflow: "hidden" }}>
+                    <iframe title={`english-preview-${a.id}`} srcDoc={englishHtml} style={{ width: "100%", height: 400, border: "none" }} />
+                  </div>
+                </div>
+              )}
+
+              {/* Hindi Version Preview */}
               <div style={{ border: "1px solid #e5e7eb", borderRadius: 8, overflow: "hidden" }}>
+                <div style={{ background: "#f3e5f5", padding: 8, fontWeight: 700, fontSize: 14 }}>🇮🇳 Hindi Version</div>
                 <iframe title={`preview-${a.id}`} srcDoc={html} style={{ width: "100%", height: 500, border: "none" }} />
               </div>
             </div>
@@ -605,7 +713,7 @@ function CompareView({ compared, fmt, getPub, page, total, totalCount, onChange 
 function ArticlePreview({ label, date, time, title, meta, html, slug, buttonColor, borderColor }) {
   return (
     <div style={{ border: `2px solid ${borderColor}`, borderRadius: 10, padding: 12, background: "#f9f9ff" }}>
-      <div style={{ display: "flex", justifyContent: "space_between", alignItems: "center", marginBottom: 12 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
         <div style={{ fontWeight: 700, color: borderColor, fontSize: 16 }}>{label}</div>
         <div style={{ fontSize: 11, color: "#666" }}>{date} {time}</div>
       </div>
