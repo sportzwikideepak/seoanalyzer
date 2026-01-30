@@ -118,6 +118,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="car-news-openai" element={<CarNewsOpenAI />} />
           <Route path="brand-car-news-openai" element={<BrandCarNewsOpenAI />} />
           <Route path="sports-news-openai" element={<SportsNewsOpenAI />} />
+          <Route path="facebook-high-ctr-generator" element={<FacebookHighCTRGenerator />} />
         </Route>
       </Routes>
     </BrowserRouter>
