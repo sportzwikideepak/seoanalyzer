@@ -56,6 +56,7 @@ import AutomobileNewsOpenAI from './AutomobileNewsOpenAI.jsx';
 import CarNewsOpenAI from './carNewsOpenAi.jsx';
 import BrandCarNewsOpenAI from './BrandCarNewsOpenAI.jsx';
 import SportsNewsOpenAI from './SportsNewsOpenAI.jsx';
+import FacebookHighCTRGenerator from './FacebookHighCTRGenerator.jsx';
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
