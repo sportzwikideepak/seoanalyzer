@@ -33,6 +33,7 @@ import HindiGscLowCtr from "./HindiGscLowCtr.jsx";
 import HindiGscRankingWatchdog from "./HindiGscRankingWatchdog.jsx";
 import HindiGscContentQueryMatch from "./HindiGscContentQueryMatch.jsx";
 import PakistanCricketNews from './PakistanCricketNews.jsx';
+import CricketAddictorHighCTRGenerator from './CricketAddictorHighCTRGenerator.jsx';
 
 import "./index.css";
 import Login from "./login_tem.jsx";
@@ -120,6 +121,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="brand-car-news-openai" element={<BrandCarNewsOpenAI />} />
           <Route path="sports-news-openai" element={<SportsNewsOpenAI />} />
           <Route path="facebook-high-ctr-generator" element={<FacebookHighCTRGenerator />} />
+          <Route path="cricket-addictor-high-ctr" element={<CricketAddictorHighCTRGenerator />} />
         </Route>
       </Routes>
     </BrowserRouter>
