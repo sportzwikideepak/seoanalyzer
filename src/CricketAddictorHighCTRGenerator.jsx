@@ -23,6 +23,7 @@ export default function CricketAddictorHighCTRGenerator() {
   const [generatedImages, setGeneratedImages] = useState([]);
   const [imagePolling, setImagePolling] = useState(false);
   const [currentContentId, setCurrentContentId] = useState(null);
+  const [imageCompleteNotification, setImageCompleteNotification] = useState(false);
 
   // Stored content tab states
   const [storedContent, setStoredContent] = useState([]);
@@ -237,6 +238,7 @@ export default function CricketAddictorHighCTRGenerator() {
     setGeneratedImages([]);
     setImagePolling(false);
     setCurrentContentId(null);
+    setImageCompleteNotification(false);
     
     try {
       console.log('📡 Step 1: Making API call for TEXT generation...');
@@ -325,6 +327,7 @@ export default function CricketAddictorHighCTRGenerator() {
               clearInterval(pollInterval);
               setImagePolling(false);
               setGeneratedImages(images);
+              setImageCompleteNotification(true);
               console.log(`✅ Image generation complete! ${images.length} images received`);
               
               // Refresh stored content
@@ -332,7 +335,21 @@ export default function CricketAddictorHighCTRGenerator() {
                 fetchStoredContent(1);
               }, 500);
               
-              alert(`✅ All done! Generated ${images.length} images successfully.`);
+              // Show prominent notification
+              alert(`🎉 IMAGES READY!\n\n✅ Successfully generated ${images.length} images!\n\nImages are now displayed below the content.`);
+              
+              // Auto-hide notification after 10 seconds
+              setTimeout(() => {
+                setImageCompleteNotification(false);
+              }, 10000);
+              
+              // Scroll to images
+              setTimeout(() => {
+                const imagesElement = document.getElementById('generated-images-section');
+                if (imagesElement) {
+                  imagesElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }, 500);
             } else if (status === 'failed') {
               clearInterval(pollInterval);
               setImagePolling(false);
@@ -459,6 +476,20 @@ export default function CricketAddictorHighCTRGenerator() {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
         }
+        @keyframes slideDown {
+          from {
+            transform: translateY(-20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+        @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
       `}</style>
       <div style={{ padding: 20, maxWidth: 1400, margin: "0 auto", fontFamily: "Inter, Arial, sans-serif" }}>
       {/* Header */}
@@ -522,6 +553,48 @@ export default function CricketAddictorHighCTRGenerator() {
           border: "1px solid #ef5350"
         }}>
           <strong>❌ Error:</strong> {error}
+        </div>
+      )}
+
+      {/* Image Complete Notification */}
+      {imageCompleteNotification && (
+        <div style={{ 
+          background: "linear-gradient(135deg, #28a745 0%, #20c997 100%)", 
+          color: "white", 
+          padding: 20, 
+          borderRadius: 12, 
+          marginBottom: 20,
+          border: "2px solid #28a745",
+          boxShadow: "0 4px 12px rgba(40,167,69,0.3)",
+          animation: "slideDown 0.5s ease-out",
+          position: "relative"
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ fontSize: 32 }}>🎉</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>
+                ✅ Images Generated Successfully!
+              </div>
+              <div style={{ fontSize: 14, opacity: 0.95 }}>
+                {generatedImages.length} images are now displayed below. Scroll down to view them!
+              </div>
+            </div>
+            <button
+              onClick={() => setImageCompleteNotification(false)}
+              style={{
+                background: "rgba(255,255,255,0.2)",
+                border: "1px solid rgba(255,255,255,0.3)",
+                color: "white",
+                padding: "8px 16px",
+                borderRadius: 6,
+                cursor: "pointer",
+                fontWeight: 600,
+                fontSize: 14
+              }}
+            >
+              ✕ Close
+            </button>
+          </div>
         </div>
       )}
 
@@ -867,16 +940,31 @@ export default function CricketAddictorHighCTRGenerator() {
 
               {/* Generated Images Display - Grouped by Concept */}
               {generatedImages && generatedImages.length > 0 ? (
-                <div style={{
+                <div id="generated-images-section" style={{
                   background: "#fff",
                   padding: 24,
                   borderRadius: 12,
                   border: "2px solid #1877f2",
                   boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                  marginBottom: 24
+                  marginBottom: 24,
+                  animation: imageCompleteNotification ? "bounce 0.6s ease-out" : "none"
                 }}>
-                  <h3 style={{ margin: 0, marginBottom: 20, color: "#1877f2", fontSize: 20 }}>
-                    🖼️ Generated Images ({generatedImages.length} total - 3 Concepts × 2 Sizes)
+                  <h3 style={{ margin: 0, marginBottom: 20, color: "#1877f2", fontSize: 20, display: "flex", alignItems: "center", gap: 8 }}>
+                    <span>🖼️</span>
+                    <span>Generated Images ({generatedImages.length} total - 3 Concepts × 2 Sizes)</span>
+                    {imageCompleteNotification && (
+                      <span style={{ 
+                        background: "#28a745", 
+                        color: "white", 
+                        padding: "4px 12px", 
+                        borderRadius: 12,
+                        fontSize: 12,
+                        fontWeight: 600,
+                        animation: "pulse 2s infinite"
+                      }}>
+                        ✅ NEW!
+                      </span>
+                    )}
                   </h3>
                   
                   {/* Group images by concept */}
