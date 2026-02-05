@@ -288,18 +288,34 @@ export default function CricketAddictorHighCTRGenerator() {
 
       // STEP 2: Generate images in background
       console.log('🎨 Step 2: Starting image generation in background...');
+      console.log(`📡 Making POST request to: ${API}/api/cricket-addictor/generate-images`);
+      console.log(`📦 Request body: { contentId: ${contentId} }`);
       setImagePolling(true);
       
       // Trigger image generation (fire and forget - don't wait)
+      const imageGenStartTime = Date.now();
       axios.post(`${API}/api/cricket-addictor/generate-images`, {
         contentId: contentId
       }, {
         timeout: 600000 // 10 minutes for image generation
       }).then(imgResponse => {
-        console.log('✅ Image generation API call successful');
+        const imageGenTime = Date.now() - imageGenStartTime;
+        console.log(`✅ Image generation API call successful in ${(imageGenTime / 1000).toFixed(2)}s`);
+        console.log('📦 Response:', imgResponse.data);
+        if (imgResponse.data.success) {
+          console.log(`🖼️ Images received: ${imgResponse.data.images?.length || 0}`);
+        }
       }).catch(err => {
-        console.error('❌ Image generation request error:', err);
-        // Don't show error to user, polling will catch it
+        const imageGenTime = Date.now() - imageGenStartTime;
+        console.error(`❌ Image generation request error after ${(imageGenTime / 1000).toFixed(2)}s:`);
+        console.error('Error details:', {
+          message: err.message,
+          code: err.code,
+          response: err.response?.data,
+          status: err.response?.status
+        });
+        // Update status to show error
+        setError(`Image generation request failed: ${err.message || 'Network error'}. Polling will continue to check status.`);
       });
 
       // STEP 3: Poll for status every 3 seconds
@@ -321,7 +337,8 @@ export default function CricketAddictorHighCTRGenerator() {
           if (statusResponse.data.success) {
             const { status, images, error } = statusResponse.data;
             
-            console.log(`📊 [Poll ${pollCount}] Status: ${status}, Images: ${images.length}`);
+            const elapsedTime = Math.floor(pollCount * 3); // seconds
+            console.log(`📊 [Poll ${pollCount}] Status: ${status}, Images: ${images.length}, Elapsed: ${elapsedTime}s`);
 
             if (status === 'done') {
               clearInterval(pollInterval);
@@ -1095,9 +1112,14 @@ export default function CricketAddictorHighCTRGenerator() {
                   <div style={{ fontSize: 16, color: "#666", marginBottom: 8 }}>
                     {imagePolling ? "⏳ Images are being generated in the background..." : "⏳ Waiting for images..."}
                   </div>
-                  <div style={{ fontSize: 12, color: "#999" }}>
+                  <div style={{ fontSize: 12, color: "#999", marginBottom: 8 }}>
                     This may take 3-5 minutes. Images will appear automatically when ready.
                   </div>
+                  {imagePolling && (
+                    <div style={{ fontSize: 11, color: "#1877f2", fontStyle: "italic" }}>
+                      💡 Check browser console (F12) for detailed progress logs
+                    </div>
+                  )}
                   {imagePolling && (
                     <div style={{ marginTop: 12 }}>
                       <div style={{
