@@ -232,37 +232,38 @@ export default function CarNewsOpenAI() {
 
   };
 
-  const startScheduler = async () => {
+  // SYNC DISABLED — scheduler commented out
+  // const startScheduler = async () => {
 
-    try {
+  //   try {
 
-      await axios.post(`${API}/api/car-openai/start-scheduler`);
+  //     await axios.post(`${API}/api/car-openai/start-scheduler`);
 
-      alert("Car scheduler started successfully!");
+  //     alert("Car scheduler started successfully!");
 
-    } catch (e) {
+  //   } catch (e) {
 
-      alert(e.response?.data?.error || e.message);
+  //     alert(e.response?.data?.error || e.message);
 
-    }
+  //   }
 
-  };
+  // };
 
-  const stopScheduler = async () => {
+  // const stopScheduler = async () => {
 
-    try {
+  //   try {
 
-      await axios.post(`${API}/api/car-openai/stop-scheduler`);
+  //     await axios.post(`${API}/api/car-openai/stop-scheduler`);
 
-      alert("Car scheduler stopped successfully!");
+  //     alert("Car scheduler stopped successfully!");
 
-    } catch (e) {
+  //   } catch (e) {
 
-      alert(e.response?.data?.error || e.message);
+  //     alert(e.response?.data?.error || e.message);
 
-    }
+  //   }
 
-  };
+  // };
 
   return (
 
@@ -324,6 +325,7 @@ export default function CarNewsOpenAI() {
 
         </button>
 
+        {/* SYNC DISABLED — scheduler buttons commented out
         <button onClick={startScheduler} style={{ background: "#28a745", color: "white" }}>
 
           ▶️ Start Scheduler
@@ -335,6 +337,7 @@ export default function CarNewsOpenAI() {
           ⏹️ Stop Scheduler
 
         </button>
+        */}
 
       </div>
 

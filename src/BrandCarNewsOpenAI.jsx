@@ -129,23 +129,24 @@ export default function BrandCarNewsOpenAI() {
     }
   };
 
-  const startScheduler = async () => {
-    try {
-      await axios.post(`${API}/api/brand-car-news/start-scheduler`);
-      alert("Brand car scheduler started successfully!");
-    } catch (e) {
-      alert(e.response?.data?.error || e.message);
-    }
-  };
+  // SYNC DISABLED — scheduler commented out
+  // const startScheduler = async () => {
+  //   try {
+  //     await axios.post(`${API}/api/brand-car-news/start-scheduler`);
+  //     alert("Brand car scheduler started successfully!");
+  //   } catch (e) {
+  //     alert(e.response?.data?.error || e.message);
+  //   }
+  // };
 
-  const stopScheduler = async () => {
-    try {
-      await axios.post(`${API}/api/brand-car-news/stop-scheduler`);
-      alert("Brand car scheduler stopped successfully!");
-    } catch (e) {
-      alert(e.response?.data?.error || e.message);
-    }
-  };
+  // const stopScheduler = async () => {
+  //   try {
+  //     await axios.post(`${API}/api/brand-car-news/stop-scheduler`);
+  //     alert("Brand car scheduler stopped successfully!");
+  //   } catch (e) {
+  //     alert(e.response?.data?.error || e.message);
+  //   }
+  // };
 
   const getBrandColor = (brand) => {
     const colors = {
@@ -205,12 +206,14 @@ export default function BrandCarNewsOpenAI() {
         <button disabled={loading} onClick={manualFetch}>
           {loading ? "⏳ Fetching..." : "🚗 Fetch Brand News"}
         </button>
+        {/* SYNC DISABLED — scheduler buttons commented out
         <button onClick={startScheduler} style={{ background: "#28a745", color: "white" }}>
           ▶️ Start Scheduler
         </button>
         <button onClick={stopScheduler} style={{ background: "#dc3545", color: "white" }}>
           ⏹️ Stop Scheduler
         </button>
+        */}
       </div>
 
       {tab === "stored" ? (

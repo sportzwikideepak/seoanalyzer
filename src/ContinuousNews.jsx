@@ -59,17 +59,17 @@ const ContinuousNews = () => {
     }
   };
 
-  // Auto-refresh every 5 minutes
+  // SYNC DISABLED — auto-refresh every 5 minutes commented out
   useEffect(() => {
     fetchStoredNews();
     fetchProcessedNews();
     
-    const interval = setInterval(() => {
-      fetchStoredNews();
-      fetchProcessedNews();
-    }, 5 * 60 * 1000); // 5 minutes
+    // const interval = setInterval(() => {
+    //   fetchStoredNews();
+    //   fetchProcessedNews();
+    // }, 5 * 60 * 1000); // 5 minutes
 
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
   }, []);
 
   // Format date and time

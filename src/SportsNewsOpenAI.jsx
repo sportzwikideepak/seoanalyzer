@@ -127,23 +127,24 @@ export default function SportsNewsOpenAI() {
     }
   };
 
-  const startScheduler = async () => {
-    try {
-      await axios.post(`${API}/api/sports-openai/start-scheduler`);
-      alert("Sports scheduler started successfully!");
-    } catch (e) {
-      alert(e.response?.data?.error || e.message);
-    }
-  };
+  // SYNC DISABLED — scheduler commented out
+  // const startScheduler = async () => {
+  //   try {
+  //     await axios.post(`${API}/api/sports-openai/start-scheduler`);
+  //     alert("Sports scheduler started successfully!");
+  //   } catch (e) {
+  //     alert(e.response?.data?.error || e.message);
+  //   }
+  // };
 
-  const stopScheduler = async () => {
-    try {
-      await axios.post(`${API}/api/sports-openai/stop-scheduler`);
-      alert("Sports scheduler stopped successfully!");
-    } catch (e) {
-      alert(e.response?.data?.error || e.message);
-    }
-  };
+  // const stopScheduler = async () => {
+  //   try {
+  //     await axios.post(`${API}/api/sports-openai/stop-scheduler`);
+  //     alert("Sports scheduler stopped successfully!");
+  //   } catch (e) {
+  //     alert(e.response?.data?.error || e.message);
+  //   }
+  // };
 
   return (
     <div style={{ padding: 20, maxWidth: 1200, margin: "0 auto", fontFamily: "Inter, Arial" }}>
@@ -177,12 +178,14 @@ export default function SportsNewsOpenAI() {
         <button disabled={loading} onClick={manualFetch}>
           {loading ? "⏳ Fetching..." : "⚽ Fetch Sports News"}
         </button>
+        {/* SYNC DISABLED — scheduler buttons commented out
         <button onClick={startScheduler} style={{ background: "#28a745", color: "white" }}>
           ▶️ Start Scheduler
         </button>
         <button onClick={stopScheduler} style={{ background: "#dc3545", color: "white" }}>
           ⏹️ Stop Scheduler
         </button>
+        */}
       </div>
 
       {tab === "stored" ? (

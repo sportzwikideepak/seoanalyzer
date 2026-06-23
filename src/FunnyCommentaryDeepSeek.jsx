@@ -11,8 +11,9 @@ function FunnyCommentaryDeepSeek({ matchId = "88324", inningNumber = 1}) {
   useEffect(() => {
     console.log("✅ Component mounted with:", matchId, inningNumber);
     fetchDeepSeek();
-    const interval = setInterval(fetchDeepSeek, 10000); // every 10 sec
-    return () => clearInterval(interval);
+    // SYNC DISABLED — auto-refresh every 10s commented out
+    // const interval = setInterval(fetchDeepSeek, 10000); // every 10 sec
+    // return () => clearInterval(interval);
   }, [matchId, inningNumber]);
 
   const fetchDeepSeek = async () => {

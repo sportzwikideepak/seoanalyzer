@@ -10,8 +10,9 @@ function FunnyCommentaryCompareBox({ matchId = "12345", inningNumber = 1 }) {
 
   useEffect(() => {
     fetchBoth();
-    const interval = setInterval(fetchBoth, 15000);
-    return () => clearInterval(interval);
+    // SYNC DISABLED — auto-refresh every 15s commented out
+    // const interval = setInterval(fetchBoth, 15000);
+    // return () => clearInterval(interval);
   }, [matchId, inningNumber]);
 
   const fetchBoth = async () => {
