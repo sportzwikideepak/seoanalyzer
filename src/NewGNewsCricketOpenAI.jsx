@@ -16,7 +16,7 @@ export default function NewGNewsCricketOpenAI() {
 
   const showToast = (type, message) => {
     setToast({ type, message });
-    setTimeout(() => setToast(null), 5000);
+    setTimeout(() => setToast(null), 7000);
   };
 
   const fmt = (v) => {
@@ -36,15 +36,16 @@ export default function NewGNewsCricketOpenAI() {
   };
 
   const getPub = (row) => row.published_at_iso ?? row.published_at;
+  const getInserted = (row) => row.created_at_iso ?? row.created_at ?? row.fetched_at_iso ?? row.fetched_at;
 
-  // Same URL as cricket-news-openai — read from DB
+  // Backend sorts ORDER BY published_at DESC, id DESC
   const fetchStored = async (p = 1) => {
     setLoading(true);
     setError(null);
     try {
       const offset = (p - 1) * PAGE;
       const r = await axios.get(
-        `${API}/api/cricket-openai/stored-news?limit=${PAGE}&offset=${offset}&sort=desc&_=${Date.now()}`,
+        `${API}/api/cricket-openai/stored-news?limit=${PAGE}&offset=${offset}&sortBy=published_at&sortOrder=desc&_=${Date.now()}`,
         { headers: { "Cache-Control": "no-cache" }, timeout: 30000 }
       );
       if (r.data?.success) {
@@ -76,7 +77,11 @@ export default function NewGNewsCricketOpenAI() {
         { timeout: 120000 }
       );
       if (r.data?.success) {
-        showToast("success", r.data.message || "✅ GNews fetch successful!");
+        // Backend: count = new inserts only; message includes duplicate info
+        const msg =
+          r.data.message ||
+          `✅ ${r.data.count ?? 0} new cricket articles saved from GNews`;
+        showToast("success", msg);
         await fetchStored(1);
       } else {
         const errMsg = r.data?.error || "Fetch failed";
@@ -87,7 +92,9 @@ export default function NewGNewsCricketOpenAI() {
       const code = e.response?.data?.code;
       const msg = e.response?.data?.error || e.message;
       if (code === "GNEWS_LIMIT_EXCEEDED" || e.response?.status === 429) {
-        const limitMsg = "⚠️ GNews API limit exceeded. Please try again later.";
+        const limitMsg =
+          e.response?.data?.error ||
+          "⚠️ GNews API limit exceeded. Please try again later.";
         setError(limitMsg);
         showToast("error", limitMsg);
       } else {
@@ -200,7 +207,7 @@ export default function NewGNewsCricketOpenAI() {
             color: "#1565c0",
           }}
         >
-          Page {page} / {totalPages} ({totalCount} articles)
+          Page {page} / {totalPages} ({totalCount} articles) · sorted by latest publish date
         </span>
       </div>
 
@@ -212,14 +219,16 @@ export default function NewGNewsCricketOpenAI() {
             No articles. Click &quot;Fetch Latest from GNews&quot; above.
           </p>
         ) : (
-          news.map((a) => {
+          news.map((a, idx) => {
             const { date, time } = fmt(getPub(a));
+            const inserted = getInserted(a);
+            const { date: insDate, time: insTime } = fmt(inserted);
             return (
               <div
                 key={a.id}
                 style={{
-                  background: "#fff",
-                  border: "1px solid #e5e7eb",
+                  background: idx === 0 && page === 1 ? "#f0f7ff" : "#fff",
+                  border: idx === 0 && page === 1 ? "2px solid #1877f2" : "1px solid #e5e7eb",
                   borderRadius: 10,
                   padding: 16,
                   boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
@@ -236,9 +245,15 @@ export default function NewGNewsCricketOpenAI() {
                 >
                   {a.title}
                 </div>
+                {idx === 0 && page === 1 && (
+                  <div style={{ fontSize: 11, color: "#1877f2", fontWeight: 600, marginBottom: 6 }}>
+                    🔝 Latest by publish date
+                  </div>
+                )}
                 <div style={{ display: "flex", gap: 14, fontSize: 12, color: "#666", flexWrap: "wrap" }}>
-                  <span>📅 {date}</span>
+                  <span>📅 Published: {date}</span>
                   <span>🕒 {time}</span>
+                  {inserted && <span>💾 DB: {insDate} {insTime}</span>}
                   <span>📰 {a.source_name || "—"}</span>
                   {typeof a.word_count === "number" && <span>📝 {a.word_count} words</span>}
                   {a.openai_processed && <span style={{ color: "#28a745" }}>✅ OpenAI</span>}
