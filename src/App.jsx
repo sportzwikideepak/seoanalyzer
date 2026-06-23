@@ -361,6 +361,7 @@ export default function App() {
     { label: "Hindi Low CTR Fixes", path: "/hindi-low-ctr" },
     { label: "Hindi Ranking Watchdog", path: "/hindi-ranking-watchdog" },
     { label: "Hindi Content Query Match", path: "/hindi-content-query-match" },
+    { label: "📰 GNews Cricket OpenAI", path: "/gnews-cricket-openai" },
     { label: "🚗 Automobile News OpenAI", path: "/automobile-news-openai" },
     { label: "🚙 Car News OpenAI", path: "/car-news-openai" },
     { label: "🏷️ Brand Car News OpenAI", path: "/brand-car-news-openai" },
